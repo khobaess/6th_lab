@@ -6,16 +6,16 @@ namespace _6th_Lab
 {
     struct Student
     {
-        public List<double> grades = new List<double>();
+        public List<int> grades = new List<int>();
         public double mean_grade = 0;
         public string surname;
 
-        public Student(List<double> x, string surname = "unknown")
+        public Student(List<int> x, string surname = "unknown")
         {
             int length = x.Count;
             double sum = 0;
 
-            foreach (double grade in x)
+            foreach (int grade in x)
             {
                 grades.Add(grade);
                 sum += grade;
@@ -69,14 +69,14 @@ namespace _6th_Lab
 
     struct Survey
     {
-        private static int counter = 0;
+        private int counter = 0;
         public string?[] answers = new string?[3];
-        private static List<string> answer1 = new List<string>();
-        private static List<string> answer2 = new List<string>();
-        private static List<string> answer3 = new List<string>();
-        private static Dictionary<string, int> cache1 = new Dictionary<string, int>();
-        private static Dictionary<string, int> cache2 = new Dictionary<string, int>();
-        private static Dictionary<string, int> cache3 = new Dictionary<string, int>();
+        private List<string> answer1 = new List<string>();
+        private List<string> answer2 = new List<string>();
+        private List<string> answer3 = new List<string>();
+        private Dictionary<string, int> cache1 = new Dictionary<string, int>();
+        private Dictionary<string, int> cache2 = new Dictionary<string, int>();
+        private Dictionary<string, int> cache3 = new Dictionary<string, int>();
 
 
         public Survey(string? ans1, string? ans2, string? ans3)
@@ -126,22 +126,22 @@ namespace _6th_Lab
             }
         }
 
-        public static List<string> Answer1
+        public List<string> Answer1
         {
             get { return answer1; }
         }
 
-        public static List<string> Answer2
+        public List<string> Answer2
         {
             get { return answer2; }
         }
 
-        public static List<string> Answer3
+        public List<string> Answer3
         {
             get { return answer3; }
         }
 
-        public static double percentage1(string ans)
+        public double percentage1(string ans)
         {
             double percentage = 0;
             if (cache1.ContainsKey(ans))
@@ -151,7 +151,7 @@ namespace _6th_Lab
             return percentage;
         }
 
-        public static double percentage2(string ans)
+        public double percentage2(string ans)
         {
             double percentage = 0;
             if (cache2.ContainsKey(ans))
@@ -161,7 +161,7 @@ namespace _6th_Lab
             return percentage;
         }
 
-        public static double percentage3(string ans)
+        public double percentage3(string ans)
         {
             double percentage = 0;
             if (cache3.ContainsKey(ans))
@@ -301,12 +301,12 @@ namespace _6th_Lab
                     Console.WriteLine("enter student's name");
                     string name = Console.ReadLine();
 
-                    List<double> tmp = new List<double>();
+                    List<int> tmp = new List<int>();
 
                     foreach (string s in row)
                     {
-                        double value;
-                        if (!double.TryParse(s, out value))
+                        int value;
+                        if (!int.TryParse(s, out value) || value < 2 || value > 5)
                         {
                             Console.WriteLine("incorrect format");
                             return;
@@ -362,12 +362,12 @@ namespace _6th_Lab
                     }
 
                     bool flag = false;
-                    List<double> tmp = new List<double>();
+                    List<int> tmp = new List<int>();
 
                     foreach (string s in row)
                     {
-                        double value;
-                        if (!double.TryParse(s, out value))
+                        int value;
+                        if (!int.TryParse(s, out value) || value < 2 || value > 5)
                         {
                             Console.WriteLine("incorrect format");
                             return;
@@ -530,6 +530,8 @@ namespace _6th_Lab
             #region task 6
             Console.WriteLine("task 6");
             {
+                Survey survey;
+
                 while (true)
                 {
                     string? s1, s2, s3;
@@ -560,13 +562,14 @@ namespace _6th_Lab
                         break;
                     }
 
-                    Survey survey = new Survey(s1, s2, s3);
+                    survey = new Survey(s1, s2, s3);
                 }
 
+
                 string title = "";
-                List<string> arr1 = Survey.Answer1;
-                List<string> arr2 = Survey.Answer2;
-                List<string> arr3 = Survey.Answer3;
+                List<string> arr1 = survey.Answer1;
+                List<string> arr2 = survey.Answer2;
+                List<string> arr3 = survey.Answer3;
 
                 List<Answer> l1 = new List<Answer>();
                 List<Answer> l2 = new List<Answer>();
@@ -593,7 +596,7 @@ namespace _6th_Lab
                     {
                         break;
                     }
-                    Answer tmp = new Answer(ans, Survey.percentage1(ans));
+                    Answer tmp = new Answer(ans, survey.percentage1(ans));
                     l1.Add(tmp);
                     i1++;
                 }
@@ -604,7 +607,7 @@ namespace _6th_Lab
                     {
                         break;
                     }
-                    Answer tmp = new Answer(ans, Survey.percentage2(ans));
+                    Answer tmp = new Answer(ans, survey.percentage2(ans));
                     l2.Add(tmp);
                     i2++;
                 }
@@ -615,7 +618,7 @@ namespace _6th_Lab
                     {
                         break;
                     }
-                    Answer tmp = new Answer(ans, Survey.percentage3(ans));
+                    Answer tmp = new Answer(ans, survey.percentage3(ans));
                     l3.Add(tmp);
                     i3++;
                 }
