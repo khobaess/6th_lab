@@ -28,56 +28,85 @@ class HelloWorld
         Console.WriteLine("Enter the number of participant: ");
         int n;
         int.TryParse(Console.ReadLine(), out n);
-        Console.WriteLine("Enter the number of matches for one participant of the tournament: ");
-        int m;
-        int.TryParse(Console.ReadLine(), out m);
-        if (n <= 0 || m<=0) {Console.WriteLine("Incorrect data!!!"); return 0; }
+        if (n <= 0 ) { Console.WriteLine("Incorrect data!!!"); return 0; }
         Sportsmens[] sportsmens = new Sportsmens[n];
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
         {
             int kollvowin = 0;
             int kollvodraw = 0;
             int kollvoloss = 0;
-            bool ae;
-            Console.WriteLine("Enter the surname of participant number " + (i+1) + ":");
+            Console.WriteLine("Enter the surname of participant number " + (i + 1) + ":");
             string surname = Console.ReadLine();
-            Console.WriteLine("Enter the results of matches for participant number " + (i+1) + ":");
-            string[] line;
-            while(true)
+            sportsmens[i] = new Sportsmens(surname, kollvowin, kollvodraw, kollvoloss);
+        }
+
+        for (int i=0; i<n; i++)
+        {
+            for (int j=i+1; j<n; j++)
             {
-                line = Console.ReadLine().Split(" ");
-                if (line.Length != m) { Console.WriteLine("Re-enter the row!"); continue; }
-                else break;
-            }
-            for (int j=0; j < m; j++)
-            {
-                ae = false;
-                if (line[j] == "Win") { kollvowin++; ae = true; }
-                if (line[j] == "Draw") { kollvodraw++; ae = true; }
-                if (line[j] == "Loss") { kollvoloss++; ae = true; }
+                Console.WriteLine("Enter the result of mathes <" + sportsmens[i].Surname + "> VS <" + sportsmens[j].Surname + ">:");
+                Console.WriteLine("If the result of the match is a draw, then write a <Draw>, otherwise write a <Win> if the match ended in defeat for the first team, or a <Loss> if the match ended in defeat for the first team.");
+                bool ae = false;
+                string line;
+                line = Console.ReadLine();
+                if (line == "Win")
+                {
+                    ae = true;
+                    sportsmens[i].kollvowin++;
+                    sportsmens[j].kollvoloss++;
+                }
+                if (line == "Draw")
+                {
+                    ae = true;
+                    sportsmens[i].kollvodraw++;
+                    sportsmens[j].kollvodraw++;
+                }
+                if (line == "Loss")
+                {
+                    ae = true;
+                    sportsmens[j].kollvowin++;
+                    sportsmens[i].kollvoloss++;
+                }
                 if (ae == false) { Console.WriteLine("Incorrect data!!!"); return 0; }
+            }
+        }
+        for (int i=0; i<n; i++)
+        {
+            sportsmens[i] = new Sportsmens(sportsmens[i].Surname, sportsmens[i].kollvowin, sportsmens[i].kollvodraw, sportsmens[i].kollvoloss);
+        }
+        int left = 0;
+        int right = sportsmens.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (sportsmens[i].obshrez < sportsmens[i + 1].obshrez)
+                {
+                    Sportsmens x = sportsmens[i];
+                    sportsmens[i] = sportsmens[i + 1];
+                    sportsmens[i + 1] = x;
+                }
 
             }
-            sportsmens[i] = new Sportsmens (surname, kollvowin, kollvodraw, kollvoloss);
-        }
-        List<double> A = new List<double> ();
-        List<int> B = new List<int>();
-        for (int i=0; i<n; i++)
-        {
-            A.Add(sportsmens[i].obshrez);
-        }
-        for (int i=0; i<n; i++)
-        {
-            for (int j=0; j<n; j++)
+            right--;
+
+            for (int i = right; i > left; i--)
             {
-                if (A[j] == A.Max()) { B.Add(j); A[j] = A.Min() - 1; }
+                if (sportsmens[i - 1].obshrez < sportsmens[i].obshrez)
+                {
+                    Sportsmens x = sportsmens[i];
+                    sportsmens[i] = sportsmens[i - 1];
+                    sportsmens[i - 1] = x;
+                }
             }
+            left++;
         }
         Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine(sportsmens[B[i]].Surname + " " + sportsmens[B[i]].obshrez);
-            
+            Console.WriteLine(sportsmens[i].Surname + " " + sportsmens[i].kollvowin);
+
         }
 
         return 0;
