@@ -84,9 +84,9 @@ class HelloWorld
             {
                 if (sportsmens[i].obshrez < sportsmens[i + 1].obshrez)
                 {
-                    double x = sportsmens[i].obshrez;
-                    sportsmens[i].obshrez = sportsmens[i + 1].obshrez;
-                    sportsmens[i + 1].obshrez = x;
+                    Sportsmens x = sportsmens[i];
+                    sportsmens[i] = sportsmens[i + 1];
+                    sportsmens[i + 1] = x;
                 }
 
             }
@@ -96,9 +96,9 @@ class HelloWorld
             {
                 if (sportsmens[i - 1].obshrez < sportsmens[i].obshrez)
                 {
-                    double x = sportsmens[i].obshrez;
-                    sportsmens[i].obshrez = sportsmens[i - 1].obshrez;
-                    sportsmens[i - 1].obshrez = x;
+                    Sportsmens x = sportsmens[i];
+                    sportsmens[i] = sportsmens[i - 1];
+                    sportsmens[i - 1] = x;
                 }
             }
             left++;
