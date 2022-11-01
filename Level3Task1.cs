@@ -8,6 +8,38 @@ using System.Windows.Markup;
 
 class HelloWorld
 {
+    static Group[] Sorti(Group[] A)
+    {
+        int left = 0;
+        int right = A.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (A[i].GroupSredmark < A[i + 1].GroupSredmark)
+                {
+                    Group x = A[i];
+                    A[i] = A[i + 1];
+                    A[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (A[i - 1].GroupSredmark < A[i].GroupSredmark)
+                {
+                    Group x = A[i];
+                    A[i] = A[i - 1];
+                    A[i - 1] = x;
+                }
+            }
+            left++;
+        }
+        return A;
+    }
     struct Student
     {
         public string Surname;
@@ -88,40 +120,11 @@ class HelloWorld
             }
             Gropus[i] = new Group(GroupName, p, student);
         }
-        int left = 0;
-        int right = Gropus.Length - 1;
-
-        while (left < right)
-        {
-            for (int i = left; i < right; i++)
-            {
-                if (Gropus[i].GroupSredmark < Gropus[i + 1].GroupSredmark)
-                {
-                    Group x = Gropus[i];
-                    Gropus[i] = Gropus[i + 1];
-                    Gropus[i + 1] = x;
-                }
-
-            }
-            right--;
-
-            for (int i = right; i > left; i--)
-            {
-                if (Gropus[i - 1].GroupSredmark < Gropus[i].GroupSredmark)
-                {
-                    Group x = Gropus[i];
-                    Gropus[i] = Gropus[i - 1];
-                    Gropus[i - 1] = x;
-                }
-            }
-            left++;
-        }
-
-
+        Sorti(Gropus);
         Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine(Gropus[i].GroupName + " " + Gropus[i].GroupSredmark);
+            Console.WriteLine(Gropus[i].GroupName + " - " + Gropus[i].GroupSredmark);
         }
         return 0;
     }
