@@ -7,6 +7,38 @@ using System.Windows.Markup;
 
 class HelloWorld
 {
+    static Sportsmens[] Sorti(Sportsmens[] A)
+    {
+        int left = 0;
+        int right = A.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (A[i].obshrez < A[i + 1].obshrez)
+                {
+                    Sportsmens x = A[i];
+                    A[i] = A[i + 1];
+                    A[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (A[i - 1].obshrez < A[i].obshrez)
+                {
+                    Sportsmens x = A[i];
+                    A[i] = A[i - 1];
+                    A[i - 1] = x;
+                }
+            }
+            left++;
+        }
+        return A;
+    }
     struct Sportsmens
     {
         public string Surname;
@@ -14,6 +46,10 @@ class HelloWorld
         public double kollvodraw;
         public double kollvoloss;
         public double obshrez;
+        public double schetobshrez(double kollvowin, double kollvodraw, double kollvoloss)
+        {
+            return obshrez = kollvowin * 1 + kollvoloss * 0 + kollvodraw * 0.5;
+        }
         public Sportsmens(string surname1, double kollvowin, double kollvodraw, double kollvoloss)
         {
             this.Surname = surname1;
@@ -28,7 +64,7 @@ class HelloWorld
         Console.WriteLine("Enter the number of participant: ");
         int n;
         int.TryParse(Console.ReadLine(), out n);
-        if (n <= 0 ) { Console.WriteLine("Incorrect data!!!"); return 0; }
+        if (n <= 0) { Console.WriteLine("Incorrect data!!!"); return 0; }
         Sportsmens[] sportsmens = new Sportsmens[n];
         for (int i = 0; i < n; i++)
         {
@@ -40,9 +76,9 @@ class HelloWorld
             sportsmens[i] = new Sportsmens(surname, kollvowin, kollvodraw, kollvoloss);
         }
 
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (int j=i+1; j<n; j++)
+            for (int j = i + 1; j < n; j++)
             {
                 Console.WriteLine("Enter the result of mathes <" + sportsmens[i].Surname + "> VS <" + sportsmens[j].Surname + ">:");
                 Console.WriteLine("If the result of the match is a draw, then write a <Draw>, otherwise write a <Win> if the match ended in defeat for the first team, or a <Loss> if the match ended in defeat for the first team.");
@@ -70,42 +106,15 @@ class HelloWorld
                 if (ae == false) { Console.WriteLine("Incorrect data!!!"); return 0; }
             }
         }
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
         {
-            sportsmens[i] = new Sportsmens(sportsmens[i].Surname, sportsmens[i].kollvowin, sportsmens[i].kollvodraw, sportsmens[i].kollvoloss);
+            sportsmens[i].schetobshrez(sportsmens[i].kollvowin, sportsmens[i].kollvodraw, sportsmens[i].kollvoloss);
         }
-        int left = 0;
-        int right = sportsmens.Length - 1;
-
-        while (left < right)
-        {
-            for (int i = left; i < right; i++)
-            {
-                if (sportsmens[i].obshrez < sportsmens[i + 1].obshrez)
-                {
-                    Sportsmens x = sportsmens[i];
-                    sportsmens[i] = sportsmens[i + 1];
-                    sportsmens[i + 1] = x;
-                }
-
-            }
-            right--;
-
-            for (int i = right; i > left; i--)
-            {
-                if (sportsmens[i - 1].obshrez < sportsmens[i].obshrez)
-                {
-                    Sportsmens x = sportsmens[i];
-                    sportsmens[i] = sportsmens[i - 1];
-                    sportsmens[i - 1] = x;
-                }
-            }
-            left++;
-        }
+        Sorti(sportsmens);
         Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine(sportsmens[i].Surname + " " + sportsmens[i].kollvowin);
+            Console.WriteLine(sportsmens[i].Surname + " - " + sportsmens[i].kollvowin);
 
         }
 
