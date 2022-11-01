@@ -8,7 +8,38 @@ using System.Windows.Markup;
 
 class HelloWorld
 {
+    static Student[] Sorti(Student[] A)
+    {
+        int left = 0;
+        int right = A.Length - 1;
 
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (A[i].Marks < A[i + 1].Marks)
+                {
+                    Student x = A[i];
+                    A[i] = A[i + 1];
+                    A[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (A[i - 1].Marks < A[i].Marks)
+                {
+                    Student x = A[i];
+                    A[i] = A[i - 1];
+                    A[i - 1] = x;
+                }
+            }
+            left++;
+        }
+        return A;
+    }
     struct Student
     {
         public string Surname;
@@ -66,82 +97,22 @@ class HelloWorld
         }
         for (int i = 0; i < n; i++)
         {
-
-           int  left = 0;
-           int  right = Gropus[i].Students.Length - 1;
-
-            while (left < right)
-            {
-                for (int p = left; p < right; p++)
-                {
-                    if (Gropus[i].Students[p].Marks < Gropus[i].Students[p + 1].Marks)
-                    {
-                        Student x;
-                        x = Gropus[i].Students[p];
-                        Gropus[i].Students[p] = Gropus[i].Students[p + 1];
-                        Gropus[i].Students[p + 1] = x;
-                    }
-                }
-                right--;
-
-                for (int p = right; p > left; p--)
-                {
-                    if (Gropus[i].Students[p - 1].Marks < Gropus[i].Students[p].Marks)
-                    {
-                        Student x;
-                        x = Gropus[i].Students[p];
-                        Gropus[i].Students[p] = Gropus[i].Students[p-1];
-                        Gropus[i].Students[p-1] = x;
-                    }
-                }
-                left++;
-            }
-
+            Sorti(Gropus[i].Students);
         }
         Student[] obsh = new Student[z];
         int l = 0;
-        for (int i=0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (int j=0; j < Gropus[i].KollvoStudents; j++)
+            for (int j = 0; j < Gropus[i].KollvoStudents; j++)
             {
                 obsh[l] = Gropus[i].Students[j];
                 l++;
             }
         }
-
-        int lef = 0;
-        int righ = obsh.Length - 1;
-
-        while (lef < righ)
-        {
-            for (int p = lef; p < righ; p++)
-            {
-                if (obsh[p].Marks < obsh[p + 1].Marks)
-                {
-                    Student x;
-                    x = obsh[p];
-                    obsh[p] = obsh[p + 1];
-                    obsh[p + 1] = x;
-                }
-            }
-            righ--;
-
-            for (int p = righ; p > lef; p--)
-            {
-                if (obsh[p - 1].Marks < obsh[p].Marks)
-                {
-                    Student x;
-                    x = obsh[p];
-                    obsh[p] = obsh[p - 1];
-                    obsh[p - 1] = x;
-                }
-            }
-            lef++;
-        }
-
+        Sorti(obsh);
         Console.WriteLine("The general summary list:");
 
-        for (int i=0; i<z; i++)
+        for (int i = 0; i < z; i++)
         {
             Console.WriteLine(obsh[i].Surname + " - " + obsh[i].Marks);
         }
