@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Windows.Markup;
 
 class HelloWorld
 {
+
     struct Sportsmens
     {
         public string Surname;
@@ -31,30 +34,30 @@ class HelloWorld
         Console.WriteLine("Enter the number of sportsmens: ");
         int n;
         int.TryParse(Console.ReadLine(), out n);
-        if (n <= 0) {Console.WriteLine("Incorrect data!!!"); return 0; }
+        if (n <= 0) { Console.WriteLine("Incorrect data!!!"); return 0; }
         Sportsmens[] sportsmens = new Sportsmens[n];
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
         {
-            Console.WriteLine("Enter the surname of sportmen number " + (i+1) + ":");
+            Console.WriteLine("Enter the surname of sportmen number " + (i + 1) + ":");
             string surname = Console.ReadLine();
-            Console.WriteLine("Enter the results of first jump of sportmen number " + (i+1) + ":");
+            Console.WriteLine("Enter the results of first jump of sportmen number " + (i + 1) + ":");
             double[] rez11 = new double[5];
             string[] line;
-            while(true)
+            while (true)
             {
                 line = Console.ReadLine().Split(" ");
                 if (line.Length != 5) { Console.WriteLine("Re-enter the row!"); continue; }
                 else break;
             }
-            for (int j=0; j < 5; j++)
+            for (int j = 0; j < 5; j++)
             {
                 double x;
                 if (double.TryParse(line[j], out x) == false) { Console.WriteLine("Incorrect data!!!"); return 0; }
                 double.TryParse(line[j], out x);
-                
+
                 rez11[j] = x;
             }
-            Console.WriteLine("Enter the results of second jump of sportmen number " + (i+1) + ":");
+            Console.WriteLine("Enter the results of second jump of sportmen number " + (i + 1) + ":");
             double[] rez22 = new double[5];
             string[] line1;
             while (true)
@@ -70,26 +73,41 @@ class HelloWorld
                 double.TryParse(line1[j], out x);
                 rez22[j] = x;
             }
-            sportsmens[i] = new Sportsmens (surname, rez11, rez22);
+            sportsmens[i] = new Sportsmens(surname, rez11, rez22);
         }
-        List<double> A = new List<double> ();
-        List<int> B = new List<int>();
-        for (int i=0; i<n; i++)
+        int left = 0;
+        int right = sportsmens.Length - 1;
+
+        while (left < right)
         {
-            A.Add(sportsmens[i].obshrez);
-        }
-        for (int i=0; i<n; i++)
-        {
-            for (int j=0; j<n; j++)
+            for (int i = left; i < right; i++)
             {
-                if (A[j] == A.Max()) { B.Add(j); A[j] = A.Min() - 1; }
+                if (sportsmens[i].obshrez < sportsmens[i + 1].obshrez)
+                {
+                    double x = sportsmens[i].obshrez;
+                    sportsmens[i].obshrez = sportsmens[i + 1].obshrez;
+                    sportsmens[i + 1].obshrez = x;
+                }
+
             }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (sportsmens[i - 1].obshrez < sportsmens[i].obshrez)
+                {
+                    double x = sportsmens[i].obshrez;
+                    sportsmens[i].obshrez = sportsmens[i - 1].obshrez;
+                    sportsmens[i - 1].obshrez = x;
+                }
+            }
+            left++;
         }
         Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine(sportsmens[B[i]].Surname + " " + sportsmens[B[i]].obshrez);
-            
+            Console.WriteLine(sportsmens[i].Surname + " - " + sportsmens[i].obshrez);
+
         }
 
         return 0;
