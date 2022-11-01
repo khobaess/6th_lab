@@ -17,7 +17,7 @@ class HelloWorld
             this.Surname = Surname;
             this.Marks = Marks;
             double sum = 0;
-            for (int i=0; i<m; i++)
+            for (int i = 0; i < m; i++)
             {
                 sum = sum + Marks[i];
             }
@@ -36,7 +36,7 @@ class HelloWorld
             this.KollvoStudents = KollvoStudents;
             this.Students = students;
             double sum = 0;
-            for (int i=0; i<KollvoStudents; i++)
+            for (int i = 0; i < KollvoStudents; i++)
             {
                 sum = sum + students[i].sredmark;
             }
@@ -53,17 +53,17 @@ class HelloWorld
         int.TryParse(Console.ReadLine(), out m);
         if (n <= 0 || m <= 0) { Console.WriteLine("Incorrect data!!!"); return 0; }
         Group[] Gropus = new Group[n];
-        for (int i=0; i<n; i++) // Ââîäèò ãðóïïó
+        for (int i = 0; i < n; i++) // Ã‚Ã¢Ã®Ã¤Ã¨Ã² Ã£Ã°Ã³Ã¯Ã¯Ã³
         {
             Console.WriteLine("Enter the name of Group number " + (i + 1) + ":");
             string GroupName = Console.ReadLine();
-            Console.WriteLine("Enter the number of students on group - " + GroupName +": ");
+            Console.WriteLine("Enter the number of students on group - " + GroupName + ": ");
             int p;
             int.TryParse(Console.ReadLine(), out p);
             if (p <= 0) { Console.WriteLine("Incorrect data!!!"); return 0; }
             Student[] student = new Student[p];
             double[] sredmars = new double[p];
-            for (int j=0; j<p; j++) //Ââîäèò ñòóäåíòà
+            for (int j = 0; j < p; j++) //Ã‚Ã¢Ã®Ã¤Ã¨Ã² Ã±Ã²Ã³Ã¤Ã¥Ã­Ã²Ã 
             {
                 double[] marks = new double[m];
                 Console.WriteLine("Enter the surname of student number " + (j + 1) + ":");
@@ -87,23 +87,40 @@ class HelloWorld
             }
             Gropus[i] = new Group(GroupName, p, student);
         }
-        List<double> A = new List<double>();
-        List<int> B = new List<int>();
-        for (int i = 0; i < n; i++)
+        int left = 0;
+        int right = Gropus.Length - 1;
+
+        while (left < right)
         {
-            A.Add(Gropus[i].GroupSredmark);
-        }
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
+            for (int i = left; i < right; i++)
             {
-                if (A[j] == A.Max()) { B.Add(j); A[j] = A.Min() - 1; }
+                if (Gropus[i].GroupSredmark < Gropus[i + 1].GroupSredmark)
+                {
+                    double x = Gropus[i].GroupSredmark;
+                    Gropus[i].GroupSredmark = Gropus[i + 1].GroupSredmark;
+                    Gropus[i + 1].GroupSredmark = x;
+                }
+
             }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (Gropus[i - 1].GroupSredmark < Gropus[i].GroupSredmark)
+                {
+                    double x = Gropus[i].GroupSredmark;
+                    Gropus[i].GroupSredmark = Gropus[i - 1].GroupSredmark;
+                    Gropus[i - 1].GroupSredmark = x;
+                }
+            }
+            left++;
         }
-        Console.WriteLine("The list of TOP: ");
+
+    
+    Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine(Gropus[B[i]].GroupName + " " + Gropus[B[i]].GroupSredmark);
+            Console.WriteLine(Gropus[i].GroupName + " " + Gropus[i].GroupSredmark);
         }
         return 0;
     }
