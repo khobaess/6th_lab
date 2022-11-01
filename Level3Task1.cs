@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net.Mail;
 using System.Runtime.ExceptionServices;
+using System.Text.RegularExpressions;
 using System.Windows.Markup;
 
 class HelloWorld
@@ -96,9 +97,9 @@ class HelloWorld
             {
                 if (Gropus[i].GroupSredmark < Gropus[i + 1].GroupSredmark)
                 {
-                    double x = Gropus[i].GroupSredmark;
-                    Gropus[i].GroupSredmark = Gropus[i + 1].GroupSredmark;
-                    Gropus[i + 1].GroupSredmark = x;
+                    Group x = Gropus[i];
+                    Gropus[i] = Gropus[i + 1];
+                    Gropus[i + 1] = x;
                 }
 
             }
@@ -108,16 +109,16 @@ class HelloWorld
             {
                 if (Gropus[i - 1].GroupSredmark < Gropus[i].GroupSredmark)
                 {
-                    double x = Gropus[i].GroupSredmark;
-                    Gropus[i].GroupSredmark = Gropus[i - 1].GroupSredmark;
-                    Gropus[i - 1].GroupSredmark = x;
+                    Group x = Gropus[i];
+                    Gropus[i] = Gropus[i - 1];
+                    Gropus[i - 1] = x;
                 }
             }
             left++;
         }
 
-    
-    Console.WriteLine("The list of TOP: ");
+
+        Console.WriteLine("The list of TOP: ");
         for (int i = 0; i < n; i++)
         {
             Console.WriteLine(Gropus[i].GroupName + " " + Gropus[i].GroupSredmark);
