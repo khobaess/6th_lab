@@ -1,0 +1,315 @@
+using System;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
+
+class Programm
+{
+    //static void sortt(AA[] st)
+    //{
+    //    int left = 0;
+    //    int right = st.Length - 1;
+
+    //    while (left < right)
+    //    {
+    //        for (int i = left; i < right; i++)
+    //        {
+    //            if (st[i].rez > st[i + 1].rez)
+    //            {
+    //                AA x = st[i];
+    //                st[i] = st[i + 1];
+    //                st[i + 1] = x;
+    //            }
+
+    //        }
+    //        right--;
+
+    //        for (int i = right; i > left; i--)
+    //        {
+    //            if (st[i - 1].rez < st[i].rez)
+    //            {
+    //                AA x = st[i];
+    //                st[i] = st[i - 1];
+    //                st[i - 1] = x;
+    //            }
+    //        }
+    //        left++;
+    //    }
+    //}
+    struct ans1
+    {
+        public string amoun1;
+        public ans1(string amoun1)
+        {
+            this.amoun1 = amoun1;
+        }
+    }
+    struct ans2
+    {
+        public string amoun2;
+        public ans2(string amoun2)
+        {
+            this.amoun2 = amoun2;
+        }
+    }
+    struct ans3
+    {
+        public string amoun3;
+        public ans3(string amoun3)
+        {
+            this.amoun3 = amoun3;
+        }
+    }
+
+    static void Main()
+    {
+        int amount;
+        Console.WriteLine("Введите количество опрошенных слушателей");
+        while (true)
+        {
+
+            if(!int.TryParse(Console.ReadLine(), out amount))
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+
+            if(amount == 0)
+            {
+                Console.WriteLine("Опрошенных нет");
+                return;
+            }
+            
+            if(amount < 0)
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+
+            break;
+        }
+
+        string ans_1;
+        string ans_2;
+        string ans_3;
+        ans1[] ans1s = new ans1[amount];
+        ans2[] ans2s = new ans2[amount];
+        ans3[] ans3s = new ans3[amount];
+
+        for (int i = 0; i < amount; i++)
+        {
+            Console.WriteLine("Введите ответ на вопрос №1, если не знаететвет пишите '-'");
+            while (true)
+            {
+                ans_1 = Console.ReadLine();
+                if (ans_1.Length <= 0)
+                {
+                    Console.WriteLine("Не корректные данные");
+                    continue;
+                }
+                break;
+            }
+            ans1s[i] = new ans1(ans_1);
+
+            Console.WriteLine("Введите ответ на вопрос №2, если не знаететвет пишите '-'");
+            while (true)
+            {
+                ans_2 = Console.ReadLine();
+                if (ans_2.Length <= 0)
+                {
+                    Console.WriteLine("Не корректные данные");
+                    continue;
+                }
+                break;
+            }
+            ans2s[i] = new ans2(ans_2);
+
+            Console.WriteLine("Введите ответ на вопрос №3, если не знаететвет пишите '-'");
+            while (true)
+            {
+                ans_3 = Console.ReadLine();
+                if (ans_3.Length <= 0)
+                {
+                    Console.WriteLine("Не корректные данные");
+                    continue;
+                }
+                break;
+            }
+            ans3s[i] = new ans3(ans_3);
+        }
+
+        string[] mas1 = new string[amount];
+        string[] mas2 = new string[amount];
+        string[] mas3 = new string[amount];
+
+        for(int i = 0; i < amount; i++)
+        {
+            mas1[i] = ans1s[i].amoun1;
+
+            mas2[i] = ans2s[i].amoun2;
+
+            mas3[i] = ans3s[i].amoun3;
+        }
+
+        int[] mmas1 = new int[amount];
+        int[] mmas2 = new int[amount];
+        int[] mmas3 = new int[amount];
+
+        string[] mas_1 = new string[amount];
+        string[] mas_2 = new string[amount];
+        string[] mas_3 = new string[amount];
+
+        int l1 = 1;
+        int l2 = 1;
+        int l3 = 1;
+
+        for(int i = 0; i < amount - 1; i++)
+        {
+            for (int j = i + 1; j < amount; j++)
+            {
+                if(mas1[i] == mas1[j] && mas1[i] != "-" && mas1[j] != "-")
+                {
+                    l1++;
+                    mas1[j] = "-";
+                }
+            }
+            if (mas1[i] != "-")
+            {
+                mmas1[i] = l1;
+                mas_1[i] = mas1[i];
+            }
+            l1 = 1;
+        }
+
+        for (int i = 0; i < amount - 1; i++)
+        {
+            for (int j = i + 1; j < amount; j++)
+            {
+                if (mas2[i] == mas2[j] && mas2[i] != "-" && mas2[j] != "-")
+                {
+                    l2++;
+                    mas2[j] = "-";
+                }
+            }
+            if (mas2[i] != "-")
+            {
+                mmas2[i] = l2;
+                mas_2[i] = mas2[i];
+            }
+            l2 = 1;
+        }
+
+        for (int i = 0; i < amount - 1; i++)
+        {
+            for (int j = i + 1; j < amount; j++)
+            {
+                if (mas3[i] == mas3[j] && mas3[i] != "-" && mas3[j] != "-")
+                {
+                    l3++;
+                    mas3[j] = "-";
+                }
+            }
+            if (mas3[i] != "-")
+            {
+                mmas3[i] = l3;
+                mas_3[i] = mas3[i];
+            }
+            l3 = 1;
+        }
+
+        int sum1 = 0;
+        int sum2 = 0;
+        int sum3 = 0;
+        for (int i = 0; i < amount; i++)
+        {
+            sum1 += mmas1[i];
+            sum2 += mmas2[i];
+            sum3 += mmas3[i];
+        }
+
+        double[] it1 = new double[10];
+        double[] it2 = new double[10];
+        double[] it3 = new double[10];
+
+        for (int i = 0; i < 5; i++)
+        {
+            for(int j = 0; j < amount; j++)
+            {
+                if (mmas1[j] == mmas1.Max() && mmas1[j] != 0)
+                {
+                    it1[i] = j;
+                    it1[i + 5] = mmas1[j];
+                    mmas1[j] = mmas1.Min() - 1;
+                    break;
+                }
+            }
+            for (int j = 0; j < amount; j++)
+            {
+                if (mmas2[j] == mmas2.Max())
+                {
+                    it2[i] = j;
+                    it2[i + 5] = mmas2[j];
+                    mmas2[j] = mmas2.Min() - 1;
+                    break;
+                }
+            }
+            for (int j = 0; j < amount; j++)
+            {
+                if (mmas3[j] == mmas3.Max())
+                {
+                    it3[i] = j;
+                    it3[i + 5] = mmas3[j];
+                    mmas3[j] = mmas3.Min() - 1;
+                    break;
+                }
+            }
+        }
+
+        int po1 = 0;
+        int po2 = 0;
+        int po3 = 0;
+
+        for(int i = 0; i < 5; i++)
+        {
+            if (it1[i + 5] > 0)
+            {
+                po1++;
+            }
+            if (it2[i + 5] > 0)
+            {
+                po2++;
+            }
+            if (it3[i + 5] > 0)
+            {
+                po3++;
+            }
+        }
+
+        if (po1 > 0)
+        {
+            Console.WriteLine("Вопрос 1");
+            for (int i = 0; i < po1; i++)
+                Console.WriteLine(mas_1[Convert.ToInt32(it1[i])] + " - " + it1[i + 5] / sum1 * 100 + "%");
+        }
+
+        if (po2 > 0)
+        {
+            Console.WriteLine("Вопрос 2");
+            for (int i = 0; i < po2; i++)
+                Console.WriteLine(mas_2[Convert.ToInt32(it2[i])] + " - " + it2[i + 5] / sum2 * 100 + "%");
+        }
+
+        if (po3 > 0)
+        {
+            Console.WriteLine("Вопрос 3");
+            for (int i = 0; i < po3; i++)
+                Console.WriteLine(mas_3[Convert.ToInt32(it3[i])] + " - " + it3[i + 5] / sum3 * 100 + "%");
+        }
+    }
+}

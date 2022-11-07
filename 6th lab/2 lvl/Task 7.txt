@@ -1,0 +1,155 @@
+using System;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
+
+class Programm
+{
+    static void sortt(AA[] st)
+    {
+        int left = 0;
+        int right = st.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (st[i].sum < st[i + 1].sum)
+                {
+                    AA x = st[i];
+                    st[i] = st[i + 1];
+                    st[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (st[i - 1].sum < st[i].sum)
+                {
+                    AA x = st[i];
+                    st[i] = st[i - 1];
+                    st[i - 1] = x;
+                }
+            }
+            left++;
+        }
+    }
+
+    struct AA
+    {
+        public string name;
+        public double w;
+        public double d;
+        public double l;
+        public double sum;
+        public double summa()
+        {
+            return sum = w + d * 0.5;
+        }
+        public AA(string name, int w, int d, int l)
+        {
+            this.name = name;
+            this.w = w;
+            this.d = d;
+            this.l = l;
+            this.sum = 0;
+            sum = w + d * 0.5;
+        }
+    }
+
+    static void Main()
+    {
+        Console.WriteLine("Введите количество спортсменов");
+        int xx;
+        while (true)
+        {
+            if(!int.TryParse(Console.ReadLine(), out xx))
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+            break;
+        }
+
+        AA[] st = new AA[xx];
+
+        for (int i = 0; i < st.Length; i++)
+        {
+            string name;
+            Console.WriteLine("Введите фамилии спортсменов");
+            name = Console.ReadLine();
+
+            if (name.Length == 0)
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+
+            st[i] = new AA(name, 0, 0, 0);
+        }
+
+        int win = 0;
+        int drow = 0;
+        int lose = 0;
+
+        for (int i = 0; i < st.Length - 1; i++)
+        {
+            for (int j = (i + 1); j < st.Length; j++)
+            {
+                Console.WriteLine(st[i].name + " VS " + st[j].name);
+                bool aa = false;
+                string game = Console.ReadLine();
+                //Console.WriteLine(st[i].name + "VS" + st[j].name);
+                
+                if(game == "win" || game == "Win")
+                {
+                    aa = true;
+                    st[i].w++;
+                    st[j].l++;
+                }
+                
+                if (game == "drow" || game == "Drow")
+                {
+                    aa = true;
+                    st[i].d++;
+                    st[j].d++;
+                }
+                
+                if(game == "lose" || game == "Lose")
+                {
+                    aa = true;
+                    st[i].l++;
+                    st[j].w++;
+                }
+
+                if(aa == false)
+                {
+                    Console.WriteLine("");
+                    continue;
+                }
+            }
+        }
+       
+        for(int i = 0; i < st.Length; i++)
+        {
+            st[i].summa();
+        }
+
+        sortt(st);
+
+        for (int i = 0; i < st.Length; i++)
+        {
+            Console.Write(st[i].name + " " + st[i].sum + " ");
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+}

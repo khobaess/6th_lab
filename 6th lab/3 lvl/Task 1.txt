@@ -1,0 +1,175 @@
+using System;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
+
+class Programm
+{
+    static void sortt(BB[] gr)
+    {
+        int left = 0;
+        int right = gr.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (gr[i].groupsr < gr[i + 1].groupsr)
+                {
+                    BB x = gr[i];
+                    gr[i] = gr[i + 1];
+                    gr[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (gr[i - 1].groupsr < gr[i].groupsr)
+                {
+                    BB x = gr[i];
+                    gr[i] = gr[i - 1];
+                    gr[i - 1] = x;
+                }
+            }
+            left++;
+        }
+    }
+
+    struct AA
+    {
+        public string surename;
+        public double[] x;
+        public double sr;
+        public AA(string surename, double[] x)
+        {
+            this.surename = surename;
+            this.x = x;
+            this.sr = 0;
+            for(int i = 0; i < x.Length; i++)
+            {
+                sr += x[i];
+            }
+            sr /= 5;
+        }
+    }
+
+    struct BB
+    {
+        public string namegroup;
+        public int amountst;
+        public double groupsr;
+        public AA[] students;
+        public BB(string namegroup, int amountst, AA[] Students)
+        {
+            this.namegroup = namegroup;
+            this.amountst = amountst;
+            this.students = Students;
+            this.groupsr = 0;
+            for (int i = 0; i < students.Length; i++)
+            {
+                groupsr += students[i].sr;
+            }
+            groupsr /= students.Length;
+        }
+    }
+
+    static void Main()
+    {
+        int amountst;
+        Console.WriteLine("Введите количество студентов в каждой группе");
+        while (true)
+        {
+            if (!int.TryParse(Console.ReadLine(), out amountst))
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+            if (amountst == 0)
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+            break;
+        }
+        AA[] st = new AA[amountst];
+
+        BB[] gr = new BB[3];
+
+        for (int i = 0; i < 3; i++) 
+        {
+            string namegroup;
+            Console.WriteLine("Введите название группы");
+            while (true)
+            {
+                namegroup = Console.ReadLine();
+                if (namegroup.Length == 0)
+                {
+                    Console.WriteLine("Не корректные данные");
+                    continue;
+                }
+                break;
+            }
+            
+            for (int j = 0; j < amountst; j++) {
+                string surename;
+                Console.WriteLine("Введите фамилию студента");
+                while (true)
+                {
+                    surename = Console.ReadLine();
+                    if (surename.Length == 0)
+                    {
+                        Console.WriteLine("Не корректные данные");
+                        continue;
+                    }
+                    break;
+                }
+
+                double[] marks = new double[5];
+                string[] mark;
+
+                Console.WriteLine("Введите 5 оценок " + surename + " за сессию");
+                while (true)
+                {
+                    mark = Console.ReadLine().Split(" ");
+                    if (mark.Length != 5)
+                    {
+                        Console.WriteLine("");
+                        continue;
+                    }
+
+                    for (int k = 0; k < mark.Length; k++)
+                    {
+                        double x;
+                        double.TryParse(mark[k], out x);
+
+                        if (double.TryParse(mark[k], out x) == false)
+                        {
+                            Console.WriteLine();
+                            continue;
+                        }
+
+                        marks[k] = x;
+                    }
+                    break;
+                }
+                st[j] = new AA(surename, marks);
+            }
+            gr[i] = new BB(namegroup, amountst, st);
+        }
+        sortt(gr);
+
+        Console.WriteLine("Список групп");
+        for(int i = 0; i < gr.Length; i++)
+        {
+            Console.WriteLine(gr[i].namegroup + " - " + gr[i].groupsr);
+        }
+    }
+}

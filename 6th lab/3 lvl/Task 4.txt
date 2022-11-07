@@ -1,0 +1,184 @@
+using System;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
+
+class Programm
+{
+    static void sortt(AA[] st)
+    {
+        int left = 0;
+        int right = st.Length - 1;
+
+        while (left < right)
+        {
+            for (int i = left; i < right; i++)
+            {
+                if (st[i].rez > st[i + 1].rez)
+                {
+                    AA x = st[i];
+                    st[i] = st[i + 1];
+                    st[i + 1] = x;
+                }
+
+            }
+            right--;
+
+            for (int i = right; i > left; i--)
+            {
+                if (st[i - 1].rez < st[i].rez)
+                {
+                    AA x = st[i];
+                    st[i] = st[i - 1];
+                    st[i - 1] = x;
+                }
+            }
+            left++;
+        }
+    }
+
+    struct AA
+    {
+        public string surename;
+        public double rez;
+        public AA(string surename, double rez)
+        {
+            this.surename = surename;
+            this.rez = rez;
+        }
+    }
+
+    struct BB
+    {
+        public string namegroup;
+        public AA[] sp;
+        public BB(string namegroup, AA[] sp)
+        {
+            this.namegroup = namegroup;
+            this.sp = sp;
+        }
+    }
+
+    static void Main()
+    {
+        int amountst;
+        Console.WriteLine("Введите количество участников в группах");
+        while (true)
+        {
+            if (!int.TryParse(Console.ReadLine(), out amountst))
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+            if (amountst == 0)
+            {
+                Console.WriteLine("Не корректные данные");
+                continue;
+            }
+            break;
+        }
+
+        //AA[] st = new AA[amountst];
+
+        BB[] gr = new BB[2];
+
+        int Z = 0;
+
+        for (int i = 0; i < 2; i++) 
+        {
+            AA[] st = new AA[amountst];
+
+            string namegroup;
+            Console.WriteLine("Введите название группы");
+            while (true)
+            {
+                namegroup = Console.ReadLine();
+                if (namegroup.Length == 0)
+                {
+                    Console.WriteLine("Не корректные данные");
+                    continue;
+                }
+                break;
+            }
+            
+            for (int j = 0; j < amountst; j++) 
+            {
+                Z++;
+                string surename;
+                Console.WriteLine("Введите фамилию спортсмена");
+                while (true)
+                {
+                    surename = Console.ReadLine();
+                    if (surename.Length == 0)
+                    {
+                        Console.WriteLine("Не корректные данные");
+                        continue;
+                    }
+                    break;
+                }
+
+                double rez;
+                Console.WriteLine("Введите результат(время) " + surename + ", за которое проехал(а) трассу");
+                while (true)
+                {
+                    if (!double.TryParse(Console.ReadLine(), out rez))
+                    {
+                        Console.WriteLine("Не корректные данные");
+                        continue;
+                    }
+                    if (rez <= 0)
+                    {
+                        Console.WriteLine("Не корректные данные");
+                        continue;
+                    }
+                    break;
+                }
+                st[j] = new AA(surename, rez);
+            }
+            gr[i] = new BB(namegroup, st);
+        }
+
+        for(int i = 0; i < 2; i++)
+        {
+            sortt(gr[i].sp);
+        }
+
+        int stud = amountst * 2;
+        AA[] ob = new AA[Z];
+        int k = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            for(int j = 0; j < amountst; j++)
+            {
+                ob[k] = gr[i].sp[j];
+                k++;
+            }
+        }
+
+        sortt(ob);
+
+        Console.WriteLine("Сортировка по группам:");
+        for (int i = 0; i < gr.Length; i++)
+        {
+            Console.WriteLine("Название группы: " + gr[i].namegroup);
+            for(int j = 0; j < amountst; j++)
+            {
+                Console.WriteLine(gr[i].sp[j].surename + " - " + gr[i].sp[j].rez);
+            }
+        }
+
+        Console.WriteLine();
+
+        Console.WriteLine("Общая картина");
+        for(int i = 0; i < ob.Length; i++)
+        {
+            Console.WriteLine(ob[i].surename + " " + ob[i].rez);
+        }
+    }
+}
