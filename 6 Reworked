@@ -1,0 +1,748 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Xml.Linq;
+
+namespace Lab6
+{
+    class Program
+    {
+        struct Student
+        {
+            public string name;
+            public int[] marks;
+            public double sred;
+            public void Show()
+            {
+                double sum = 0;
+                foreach (int item in marks)
+                {
+                    sum += item;
+                }
+                double sred = sum / 4.0;
+                Console.WriteLine($"Имя: {name} || Средний бал: {sred}");  
+            }
+
+        }
+        struct Sportsmen
+        {
+            public string name;
+            public int[] marks;
+            public int bmark;
+            public void Show()
+            {
+                bmark = marks.Max();
+                Console.WriteLine($"Имя: {name} || Высшая оценка: {bmark}");
+            }
+        }
+        struct StudentGroup
+        {
+            public string groupname;
+            public double sred;
+            public StudentGroup(double[] grades, string groupname, int n)
+            {
+                this.groupname = groupname;
+                double sum = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    sum += grades[i];
+                }
+                sred = (sum / (n * 5.0) );
+
+            }
+            public void Show()
+            {
+                Console.WriteLine($"Номер группы: {groupname} || Средний бал: {sred}");
+            }
+            
+        }
+        struct Group
+        {
+            public string name;
+            public double mark;
+            public void Show()
+            {
+                Console.WriteLine($"Имя: {name} || Оценка: {mark}");
+            }
+        }
+        struct Japan
+        {
+            public string name;
+            public string answ1;
+            public string answ2;
+            public string answ3;
+            public void Show()
+            {
+                if (answ1 != "" && answ2 != "" && answ3 != "" )
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ1}  {answ2}  {answ3}");
+                }
+                if (answ1 != "" && answ2 != "" && answ3 == "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ1}  {answ2}");
+                }
+                if (answ1 != "" && answ2 == "" && answ3 != "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ1}  {answ3}");
+                }
+                if (answ1 == "" && answ2 != "" && answ3 != "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ2}  {answ3}");
+                }
+                if (answ1 != "" && answ2 == "" && answ3 == "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ1}");
+                }
+                if (answ1 == "" && answ2 != "" && answ3 == "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ2}");
+                }
+                if (answ1 == "" && answ2 == "" && answ3 != "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: {answ3}");
+                }
+                if (answ1 == "" && answ2 == "" && answ3 == "")
+                {
+                    Console.WriteLine($"Имя: {name} || answ: Нет их");
+                }
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            #region Task1L2
+
+            static void L2N1()
+            {
+                void SORT(int schet, Student[] stud, int[] a)
+                {
+                    for (int i = 0; i < schet - 1; i++)
+                    {
+                        for (int j = 0; j < schet - 1; j++)
+                        {
+                            if (stud[a[j]].sred < stud[a[j + 1]].sred)
+                            {
+                                (stud[a[j]], stud[a[j + 1]]) = (stud[a[j + 1]], stud[a[j]]);
+                            }
+                        }
+                    }
+                }
+
+                int n;
+                Console.WriteLine("Введите кол-во студентов");
+                bool normul = int.TryParse(Console.ReadLine(), out n);
+                if (!normul)
+                {
+                    Console.WriteLine("Вы ввели что-то не то");
+                    return;
+                }
+                Student[] stud = new Student[n];
+                int[] a = new int[n];
+                int schet = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    int[] ozenki = new int[4];
+                    int count = 0;
+                    string name;
+                    Console.WriteLine("Введите имя студента");
+                    name = Console.ReadLine();
+                    int sum = 0;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        Console.WriteLine($"Введите балл за экзамен {count + 1}");
+                        count += 1;
+                        bool normulik = int.TryParse(Console.ReadLine(), out ozenki[j]);
+                        if (!normulik)
+                        {
+                            Console.WriteLine("Вы ввели что-то не то");
+                            ozenki[j] = 2;
+                        }
+                        sum += ozenki[j];
+                    }
+                    if (sum / 4.0 > 4)
+                    {
+                        a[schet] = i;
+                        schet += 1;
+                    }
+                    stud[i].marks = new int[4];
+                    for (int j = 0; j < 4; j++)
+                    {
+                        stud[i].marks[j] = ozenki[j];
+                    }
+                    stud[i].name = name;
+                    //stud[i].Show();
+                }
+                if (schet == 0)
+                {
+                    Console.WriteLine("Хороших студентов нет");
+                    return;
+                }
+
+                /*
+                for (int i = 0; i < schet - 1; i++)
+                {
+                    for (int j = 0; j < schet - 1; j++)
+                    {
+                        if (stud[a[j]].sred < stud[a[j + 1]].sred)
+                        {
+                            (stud[a[j]], stud[a[j + 1]]) = (stud[a[j + 1]], stud[a[j]]);
+                        }
+                    }
+                }
+                */
+                SORT(schet, stud, a);
+                
+                for (int i = 0; i < schet; i++)
+                {
+                    stud[a[i]].Show();
+                }
+            }
+            #endregion
+            #region Task3L2
+
+            static void L2N3()
+            {
+                int n;
+                Console.WriteLine("Введите кол-во спортсменов");
+                bool normul = int.TryParse(Console.ReadLine(), out n);
+                if (!normul)
+                {
+                    Console.WriteLine("Вы ввели что-то не то");
+                    return;
+                }
+                Sportsmen[] sport = new Sportsmen[n];
+                for (int i = 0; i < n; i++)
+                {
+                    int[] ozenki = new int[3];
+                    int count = 0;
+                    string name;
+                    Console.WriteLine("Введите фамилию");
+                    name = Console.ReadLine();
+                    int sum = 0;
+                    for (int j = 0; j < 3; j++)
+                    {
+                        Console.WriteLine($"Введите балл за пыжок {count + 1}");
+                        count += 1;
+                        bool normulik = int.TryParse(Console.ReadLine(), out ozenki[j]);
+                        if (!normulik)
+                        {
+                            Console.WriteLine("Вы ввели что-то не то");
+                            ozenki[j] = 2;
+                        }
+                        sum += ozenki[j];
+                    }
+                    sport[i].marks = new int[3];
+                    for (int j = 0; j < 3; j++)
+                    {
+                        sport[i].marks[j] = ozenki[j];
+                    }
+                    sport[i].name = name;
+                }
+                for (int i = 0; i < n; i++)
+                {
+                    sport[i].Show();
+                }
+            }
+            #endregion
+            #region Task1L3
+            static void L3N1()
+            {
+                int[] nik = new int[3];
+                int n;
+                int schet = 0;
+
+                StudentGroup[] p = new StudentGroup[3];
+                #region Vvod1
+                void Vvod(int b)
+                {
+                    Console.WriteLine("Введите кол-во студентов в группах");
+                    bool normul = int.TryParse(Console.ReadLine(), out n);
+                    if (!normul)
+                    {
+                        Console.WriteLine("Вы ввели что-то не то");
+                        return;
+                    }
+                    Console.WriteLine("Введите имя группы");
+                    string name = Console.ReadLine();
+                    double[] sumik = new double[n];
+                    for (int i = 0; i < n; i++)
+                    {
+                        int sum = 0;
+                        int[] ozenki = new int[5];
+                        int count = 0;
+                        for (int j = 0; j < 5; j++)
+                        {
+                            Console.WriteLine($"Введите балл за экзамен {count + 1}");
+                            count += 1;
+                            bool normulik = int.TryParse(Console.ReadLine(), out ozenki[j]);
+                            if (!normulik)
+                            {
+                                Console.WriteLine("Вы ввели что-то не то");
+                                ozenki[j] = 2;
+                            }
+                        }
+                        for (int j = 0; j < 5; j++)
+                        {
+                            sum += ozenki[j];
+                        }
+                        sumik[i] = sum;
+                    }
+                    p[b] = new StudentGroup(sumik, name, n);
+                }
+                #endregion
+                Vvod(0);
+                Vvod(1);
+                Vvod(2);
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        if (p[j].sred < p[j + 1].sred)
+                        {
+                            (p[j], p[j + 1]) = (p[j + 1], p[j]);
+                        }
+                    }
+                }
+                for (int i = 0; i < 3; i++)
+                {
+                    p[i].Show();
+                }
+
+                
+
+            }
+            #endregion
+            #region Task4L3
+
+            static void L3N4()
+            {
+                #region Vvod1
+                int n;
+                Console.WriteLine("Введите кол-во спортсменов");
+                bool normul = int.TryParse(Console.ReadLine(), out n);
+                if (!normul)
+                {
+                    Console.WriteLine("Вы ввели что-то не то");
+                    return;
+                }
+                Group[] sport = new Group[n];
+                for (int i = 0; i < n; i++)
+                {
+                    Console.WriteLine("Введите фамилию");
+                    sport[i].name = Console.ReadLine();
+                    int sum = 0;
+                    Console.WriteLine($"Введите балл за пыжок");
+                    bool norm = double.TryParse(Console.ReadLine(), out sport[i].mark);
+                    if (!norm)
+                    {
+                        Console.WriteLine("Вы ввели что-то не то");
+                        sport[i].mark = 2;
+                    }
+
+                }
+                #endregion
+                int[] V1 = new int[n];
+                for (int i = 0; i < n; i++)
+                {
+                    V1[i] = i;
+                }
+                #region Vvod2
+                int m;
+                Console.WriteLine("Введите кол-во спортсменов");
+                bool normulik = int.TryParse(Console.ReadLine(), out m);
+                if (!normulik)
+                {
+                    Console.WriteLine("Вы ввели что-то не то");
+                    return;
+                }
+                Group[] sportik = new Group[m];
+                for (int i = 0; i < m; i++)
+                {
+                    
+                    Console.WriteLine("Введите фамилию");
+                    sportik[i].name = Console.ReadLine();
+
+                    Console.WriteLine($"Введите балл за пыжок");
+                    bool normulek = double.TryParse(Console.ReadLine(), out sportik[i].mark);
+                    if (!normulek)
+                    {
+                        Console.WriteLine("Вы ввели что-то не то");
+                        sport[i].mark = 2;
+                    }
+
+                }
+                #endregion
+                int[] V2 = new int[m];
+                for (int i = 0; i < m; i++)
+                {
+                    V2[i] = i;
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    for (int j = 0; j < n - 1; j++)
+                    {
+                        if (sport[V1[j]].mark < sport[V1[j + 1]].mark)
+                        {
+                            (sport[j], sport[j + 1]) = (sport[j + 1], sport[j]);
+                        }
+                    }
+                }
+                for (int i = 0; i < m; i++)
+                {
+                    for (int j = 0; j < m - 1; j++)
+                    {
+                        if (sportik[V2[j]].mark < sportik[V2[j + 1]].mark)
+                        {
+                            (sportik[j], sportik[j + 1]) = (sportik[j + 1], sportik[j]);
+                        }
+                    }
+                }
+
+                Console.WriteLine();
+                for (int i = 0; i < n; i++)
+                {
+                    sport[i].Show();
+                }
+                Console.WriteLine();
+                for (int i = 0; i < m; i++)
+                {
+                    sportik[i].Show();
+                }
+                Console.WriteLine();
+                
+                
+
+
+            }
+            #endregion
+            #region Task6L3
+
+            static void L3N6()
+            {
+                int n;
+                Console.WriteLine("Введите кол-во опрошеных");
+                bool normul = int.TryParse(Console.ReadLine(), out n);
+                if (!normul)
+                {
+                    Console.WriteLine("Вы ввели что-то не то");
+                    return;
+                }
+                Japan[] japan = new Japan[n];
+
+                int flag1 = 0;
+                int flag2 = 0;
+                int flag3 = 0;
+
+                for (int j = 0; j < n; j++)
+                {
+                    Console.WriteLine("Введите фамилию");
+                    japan[j].name = Console.ReadLine();
+                    Console.WriteLine("Введите ответы на вопросы:");
+
+                    japan[j].answ1 = Console.ReadLine();
+                    if (japan[j].answ1 == "")
+                    {
+                        flag1 = 1;
+                    }
+                    japan[j].answ2 = Console.ReadLine();
+                    if (japan[j].answ2 == "")
+                    {
+                        flag2 = 1;
+                    }
+                    japan[j].answ3 = Console.ReadLine();
+                    if (japan[j].answ3 == "")
+                    {
+                        flag3 = 1;
+                    }
+                }
+
+
+                Console.WriteLine();
+                for (int i = 0; i < n; i++)
+                {
+                    japan[i].Show();
+                }
+
+                #region Slov1
+                int counter = 0;
+                string[] slovar1 = new string[n];
+                int countslov1 = 1;
+                int individual1 = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    int flagslov1 = 0;
+                    foreach (string item in slovar1)
+                    {
+                        if (item == japan[i].answ1)
+                        {
+                            flagslov1 = 1;
+                            countslov1++;
+
+                            continue;
+                        }
+                    }
+                    if (flagslov1 == 0 )
+                    {
+                        slovar1[counter] = japan[i].answ1;
+                        counter++;
+                        individual1++;
+                    }  
+                }
+                #endregion
+                #region Slov2
+                counter = 0;
+                int individual2 = 0;
+                string[] slovar2 = new string[n];
+                int countslov2 = 1;
+                for (int i = 0; i < n; i++)
+                {
+                    int flagslov2 = 0;
+                    foreach (string item in slovar2)
+                    {
+                        if (item == japan[i].answ2)
+                        {
+                            flagslov2 = 1;
+                            countslov2++;
+
+                            continue;
+                        }
+                    }
+                    if (flagslov2 == 0)
+                    {
+                        slovar2[counter] = japan[i].answ2;
+                        counter++;
+                        individual2++;
+                    }
+                }
+                #endregion
+                #region Slov3
+                counter = 0;
+                int individual3 = 0;
+                string[] slovar3 = new string[n];
+                int countslov3 = 1;
+                for (int i = 0; i < n; i++)
+                {
+                    int flagslov3 = 0;
+                    foreach (string item in slovar3)
+                    {
+                        if (item == japan[i].answ3)
+                        {
+                            flagslov3 = 1;
+                            countslov3++;
+
+                            continue;
+                        }
+                    }
+                    if (flagslov3 == 0)
+                    {
+                        slovar3[counter] = japan[i].answ3;
+                        counter++;
+                        individual3++;
+                    }
+                }
+                #endregion
+                #region LOl
+                /*
+                Console.WriteLine();
+                for (int i = 0; i < individual1; i++)
+                {
+                    Console.Write($"{slovar1[i]} ");
+                }
+                Console.Write($":  {countslov1} ");
+                Console.WriteLine();
+                for (int i = 0; i < individual2; i++)
+                {
+                    Console.Write($"{slovar2[i]} ");
+                }
+                Console.Write($":  {countslov2} ");
+                Console.WriteLine();
+                for (int i = 0; i < individual3; i++)
+                {
+                    Console.Write($"{slovar3[i]} ");
+                }
+                Console.Write($":  {countslov3} ");
+                Console.WriteLine();
+                */
+                #endregion
+                double[] SL1 = new double[n];
+                double [] SL2 = new double[n];
+                double[] SL3 = new double[n];
+                double delit = n;
+                #region Slov1-Rep
+                for (int j = 0; j < individual1; j++)
+                {
+                    int kolvo1 = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        if (slovar1[j] == japan[i].answ1)
+                        {
+                            kolvo1++;
+                        }
+                    }
+                    SL1[j] = (float)(kolvo1 / delit * 100 );
+                }
+                /*
+                for (int i = 0; i < individual1; i++)
+                {
+                    Console.Write($"{slovar1[i]}  {SL1[i]}");
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                */
+                #endregion
+                #region Slov2-Rep
+                for (int j = 0; j < individual2; j++)
+                {
+                    int kolvo2 = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        if (slovar2[j] == japan[i].answ2)
+                        {
+                            kolvo2++;
+                        }
+                    }
+                    SL2[j] = (kolvo2 / delit * 100);
+                }
+                /*
+                for (int i = 0; i < individual2; i++)
+                {
+                    Console.Write($"{slovar2[i]}  {SL2[i]}");
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                */
+                #endregion
+                #region Slov3-Rep
+                for (int j = 0; j < individual3; j++)
+                {
+                    int kolvo3 = 0;
+                    for (int i = 0; i < n; i++)
+                    {
+                        if (slovar3[j] == japan[i].answ3)
+                        {
+                            kolvo3++;
+                        }
+                    }
+                    SL3[j] = (float)(kolvo3 / delit * 100);
+                }
+                /*
+                for (int i = 0; i < individual3; i++)
+                {
+                    Console.Write($"{slovar3[i]}  {SL3[i]}");
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                */
+                #endregion
+
+                #region Sort_SL1
+
+                for (int i = 0; i < individual1; i++)
+                {
+                    for (int j = 0; j < individual1 - 1; j++)
+                    {
+                        if (SL1[j] < SL1[j + 1])
+                        {
+                            (SL1[j], SL1[j + 1]) = (SL1[j + 1], SL1[j]);
+                            (slovar1[j], slovar1[j + 1]) = (slovar1[j + 1],slovar1[j]);
+                        }
+                    }
+                }
+                if (individual1 >=5)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.Write($"{slovar1[i]}  {SL1[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                if (individual1 < 5)
+                {
+                    for (int i = 0; i < individual1; i++)
+                    {
+                        Console.Write($"{slovar1[i]}  {SL1[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                
+                #endregion
+                #region Sort_SL2
+
+                for (int i = 0; i < individual2; i++)
+                {
+                    for (int j = 0; j < individual2 - 1; j++)
+                    {
+                        if (SL2[j] < SL2[j + 1])
+                        {
+                            (SL2[j], SL2[j + 1]) = (SL2[j + 1], SL2[j]);
+                            (slovar2[j], slovar2[j + 1]) = (slovar2[j + 1], slovar2[j]);
+                        }
+                    }
+                }
+                if (individual2 >= 5)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.Write($"{slovar2[i]}  {SL2[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                if (individual2 < 5)
+                {
+                    for (int i = 0; i < individual2; i++)
+                    {
+                        Console.Write($"{slovar2[i]}  {SL2[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                #endregion
+                #region Sort_SL3
+
+                for (int i = 0; i < individual3; i++)
+                {
+                    for (int j = 0; j < individual3 - 1; j++)
+                    {
+                        if (SL3[j] < SL3[j + 1])
+                        {
+                            (SL3[j], SL3[j + 1]) = (SL3[j + 1], SL3[j]);
+                            (slovar3[j], slovar3[j + 1]) = (slovar3[j + 1], slovar3[j]);
+                        }
+                    }
+                }
+                if (individual3 >= 5)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        Console.Write($"{slovar3[i]}  {SL3[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                if (individual3 < 5)
+                {
+                    for (int i = 0; i < individual3; i++)
+                    {
+                        Console.Write($"{slovar3[i]}  {SL3[i]}%");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+                #endregion
+            }
+            #endregion
+            //L2N1();
+            //L2N3();
+            //L3N1();
+            //L3N4();
+            //L3N6();
+        }
+    }
+}
