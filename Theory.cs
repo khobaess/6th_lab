@@ -68,6 +68,17 @@ namespace _6th_Lab
                 Console.WriteLine($"_nooneShouldKnowAboutMe:{_nooneShouldKnowAboutMe}\nAutoProperty:{AutoProperty}\nOnlyGetProperty:{OnlyGetProperty}\n" +
                     $"ExtendedProperty:{ExtendedProperty}\nlocalValiable:{localValiable}");
             }
+            
+            public void TellAboutYourself()
+            {
+                Console.WriteLine($"I can tell you that i have field _nooneShouldKnowAboutMe that contains {_nooneShouldKnowAboutMe} but you not able to find it :) ");
+                OnlyStructureCanCallMe();
+            }
+            
+            private void OnlyStructureCanCallMe()
+            {
+                Console.WriteLine("I am encapsulated method. It is so cool to be like me!!! You even cannot to call me directly from the Main() ");
+            }
         }
 
         static void Main(string[] args)
@@ -120,7 +131,9 @@ namespace _6th_Lab
             fieldsPropertiesMethods.ExtendedProperty = 10;
             fieldsPropertiesMethods.ReadEverything();
             Console.WriteLine(fieldsPropertiesMethods.OnlyGetProperty);
-
+            
+            // Let's get private information
+            fieldsPropertiesMethods.TellAboutYourself();
             #endregion
         }
     }
