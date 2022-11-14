@@ -1,0 +1,602 @@
+using System;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
+
+namespace lab6
+{
+    struct Ycheb
+    {
+        public string Famile;
+        public int Math;
+        public int Fiz;
+        public int Rus;
+        public double Sred;
+        public Ycheb(string Famile, int Math, int Fiz, int Rus)
+        {
+            this.Famile = Famile;
+            this.Math = Math;
+            this.Fiz = Fiz;
+            this.Rus = Rus;
+            Sred = (Math + Fiz + Rus) / 3.0;
+        }
+
+    }
+
+    struct Sorev
+    {
+        public string Famile;
+        public double Try1;
+        public double Try2;
+        public double Try3;
+        public double Mx;
+        public Sorev(string Famile, double Try1, double Try2, double Try3)
+        {
+            this.Famile = Famile;
+            this.Try1 = Try1;
+            this.Try2 = Try2;
+            this.Try3 = Try3;
+            Mx = (Try1 > Try2) ? Try1 : Try2;
+            Mx = (Mx > Try3) ? Mx : Try3;
+        }
+    }
+
+    struct StudentGroup
+    {
+        public double res;
+        public int[] Marks;
+        public string NameGroup;
+        public int CountPeople;
+        public StudentGroup(string NameGroup, int CountPeople, int[] Marks)
+        {
+            this.CountPeople = CountPeople;
+            this.Marks = Marks;
+            this.NameGroup = NameGroup;
+            int sm = 0;
+            for (int i = 0; i != Marks.Length; i++)
+            {
+                sm+=Marks[i];
+            }
+            res = sm / (CountPeople * 5.0);
+        }
+        public void Print()
+        {
+            Console.WriteLine($"{NameGroup} \t {CountPeople} \t \t{res}");
+        }
+
+    }
+
+
+    struct Skiers
+    {
+        public string Famile;
+        public double Result;
+        public Skiers(string Famile, double Result)
+        {
+            this.Famile = Famile;
+            this.Result = Result;
+        }
+    }
+
+    struct Japanese
+    {
+        public string Famile;
+        public string Ans1;
+        public string Ans2;
+        public string Ans3;
+        public Japanese(string Famile, string Ans1, string Ans2, string Ans3)
+        {
+            this.Famile = Famile;
+            this.Ans1 = Ans1;
+            this.Ans2 = Ans2;
+            this.Ans3 = Ans3;
+        }
+        public void Print()
+        {
+            if (Ans1 != "" & Ans2 != "" & Ans3 != "")
+                Console.WriteLine($"{Famile}\t| Answer\t| {Ans1} \t {Ans2} \t {Ans3}");
+            if (Ans1 == "" & Ans2 != "" & Ans3 != "")
+                Console.WriteLine($"{Famile}\t| Answer\t| \t {Ans2} \t {Ans3}");
+            if (Ans1 != "" & Ans2 == "" & Ans3 != "")
+                Console.WriteLine($"{Famile}\t| Answer\t| {Ans1} \t\t {Ans3}");
+            if (Ans1 != "" & Ans2 != "" & Ans3 == "")
+                Console.WriteLine($"{Famile}\t| Answer\t| {Ans1} \t {Ans2}");
+            if (Ans1 == "" & Ans2 == "" & Ans3 != "")
+                Console.WriteLine($"{Famile}\t| Answer\t| \t \t {Ans3}");
+            if (Ans1 == "" & Ans2 != "" & Ans3 == "")
+                Console.WriteLine($"{Famile}\t| Answer\t| \t {Ans2}");
+            if (Ans1 != "" & Ans2 == "" & Ans3 == "")
+                Console.WriteLine($"{Famile}\t| Answer\t| {Ans1}");
+            if (Ans1 == "" & Ans2 == "" & Ans3 == "")
+                Console.WriteLine($"{Famile}\t| Answer\t| No any answer");
+        }
+    }
+
+    struct AnimalQuantity
+    {
+        public string name;
+        public double res;
+        public AnimalQuantity(string name, double res)
+        {
+            this.name = name;
+            this.res = res;
+        }
+        public void Print()
+        {
+            Console.WriteLine($"{name}\t\t|\t{res}%");
+        }
+    }
+    struct CharacterQuantity
+    {
+        public string name;
+        public double res;
+        public CharacterQuantity(string name, double res)
+        {
+            this.name = name;
+            this.res = res;
+        }
+        public void Print()
+        {
+            Console.WriteLine($"{name}\t\t|\t{res}%");
+        }
+    }
+    struct TreeQuantity
+    {
+        public string name;
+        public double res;
+        public TreeQuantity(string name, double res)
+        {
+            this.name = name;
+            this.res = res;
+        }
+        public void Print()
+        {
+            Console.WriteLine($"{name}\t\t|\t{res}%");
+        }
+    }
+
+
+    internal class Program
+    {
+
+        static void Main(string[] args)
+        {
+            static void Task2_2()
+            {
+                Ycheb[] Ych = new Ycheb[5];
+                Ych[0] = new Ycheb("Иванов", 3, 2, 4);
+                Ych[1] = new Ycheb("Петров", 4, 4, 5);
+                Ych[2] = new Ycheb("Сидоров", 2, 2, 3);
+                Ych[3] = new Ycheb("Абрамов", 5, 5, 5);
+                Ych[4] = new Ycheb("Еще кто-то", 3, 4, 5);
+                Console.WriteLine("Фамилия      Математика      Физика      Русский язык      Средний балл");
+                for (int i = 0; i != Ych.Length; i++)
+                {
+                    Console.WriteLine($"{Ych[i].Famile,-11} {Ych[i].Math,11} {Ych[i].Fiz,11}{Ych[i].Rus,18}      {Ych[i].Sred:f2}");
+                }
+                for (int i = 1; i != Ych.Length; i++)
+                {
+                    int j = i;
+                    Ycheb remember = Ych[i];
+                    while (j > 0 && Ych[j - 1].Sred < Ych[j].Sred)
+                    {
+                        Ycheb temp = Ych[j - 1];
+                        Ych[j - 1] = Ych[j];
+                        Ych[j] = temp;
+                        j--;
+                    }
+                    Ych[j] = remember;
+                }
+                Console.WriteLine();
+                Console.WriteLine("Фамилия      Математика      Физика      Русский язык      Средний балл");
+
+                for (int i = 0; i != Ych.Length; i++)
+                {
+                    if (!(Ych[i].Math == 2 | Ych[i].Fiz == 2 | Ych[i].Rus == 2))
+                        Console.WriteLine($"{Ych[i].Famile,-11} {Ych[i].Math,11} {Ych[i].Fiz,11}{Ych[i].Rus,18}      {Ych[i].Sred:f2}");
+                }
+
+            }
+
+            static void Task2_3()
+            {
+                Sorev[] Sor = new Sorev[5];
+                Sor[0] = new Sorev("Иванов", 1.54, 2.01, 1.57);
+                Sor[1] = new Sorev("Петров", 1.4, 1.01, 1.2);
+                Sor[2] = new Sorev("Сидоров", 2, 2, 2.23);
+                Sor[3] = new Sorev("Абрамов", 1.3, 1.3, 1.3);
+                Sor[4] = new Sorev("Еще кто-то", 1.01, 1.32, 1.69);
+                Console.WriteLine("Фамилия      Try#1      Try#2      Try#3     MaxTry");
+                for (int i = 0; i != Sor.Length; i++)
+                {
+                    Console.WriteLine($"{Sor[i].Famile,-11} {Sor[i].Try1,5} {Sor[i].Try2,10} {Sor[i].Try3,10} {Sor[i].Mx,9}");
+                }
+                for (int i = 1; i != Sor.Length; i++)
+                {
+                    int j = i;
+                    Sorev remember = Sor[i];
+                    while (j > 0 && Sor[j - 1].Mx < Sor[j].Mx)
+                    {
+                        Sorev temp = Sor[j - 1];
+                        Sor[j - 1] = Sor[j];
+                        Sor[j] = temp;
+                        j--;
+                    }
+                    Sor[j] = remember;
+                }
+                Console.WriteLine();
+                Console.WriteLine("Фамилия      Try#1      Try#2      Try#3     MaxTry");
+                for (int i = 0; i != Sor.Length; i++)
+                {
+                    Console.WriteLine($"{Sor[i].Famile,-11} {Sor[i].Try1,5} {Sor[i].Try2,10} {Sor[i].Try3,10} {Sor[i].Mx,9}");
+                }
+
+            }
+
+            static void Task3_1()
+            {
+                StudentGroup[] St = new StudentGroup[3];
+                St[0] = new StudentGroup("FirstGr", 2,new int[] {4,4,2,3,2,4,5,2,3,5});
+                St[1] = new StudentGroup("SecondGr", 3, new int[] { 2,3,2,3,2,3,4,5,5,5,3,5,3,4,5});
+                St[2] = new StudentGroup("ThirdGr", 1, new int[] {5,5,5,5,4 });
+                Console.WriteLine("GroupName \t PeopleCount \tSrZnach");
+                St[0].Print();
+                St[1].Print();
+                St[2].Print();
+                Console.WriteLine();
+                for (int i = 1; i != St.Length; i++)
+                {
+                    int j = i;
+                    StudentGroup remember = St[i];
+                    while (j > 0 && St[j].res > St[j - 1].res)
+                    {
+                        (St[j - 1], St[j]) = (St[j], St[j - 1]);
+                        j--;
+                    }
+                    St[j] = remember;
+                }
+                Console.WriteLine("GroupName \t PeopleCount \tSrZnach");
+                St[0].Print();
+                St[1].Print();
+                St[2].Print();
+            }
+
+            //(string Name, int People, int[] TheirMarks) Tuple1 = ("FirstGroup", 3, { 2,3,2,4});
+            //(string Name, int People, int[] TheirMarks) Tuple2 = ("SecondGroup", 2, { 2,3,2,4});
+
+            static void Task3_4()
+            {
+                Skiers[] Group1 = new Skiers[5];
+                Group1[0] = new Skiers("Sir1", 10.3);
+                Group1[1] = new Skiers("Sir2", 3.1);
+                Group1[2] = new Skiers("Sir3", 5);
+                Group1[3] = new Skiers("Sir4", 6.3);
+                Group1[4] = new Skiers("Sir5", 2);
+
+                Skiers[] Group2 = new Skiers[3];
+                Group2[0] = new Skiers("Sir10", 8.34);
+                Group2[1] = new Skiers("Sir20", 32);
+                Group2[2] = new Skiers("Sir30", 4.232);
+
+                //static struct SortMethod(struct Skiers) -- How to send a structer to a sort method?
+                #region Sort1
+                int n = Group1.Length;
+                int index = 0;
+                while (index < n)
+                {
+                    if (index == 0)
+                        index++;
+                    if (Group1[index].Result > Group1[index - 1].Result)
+                        index++;
+                    else
+                    {
+                        Skiers temp = Group1[index];
+                        Group1[index] = Group1[index - 1];
+                        Group1[index - 1] = temp;
+                        index--;
+                    }
+                }
+                #endregion≈
+                #region Sort2
+                {
+                    for (int i = 1; i != Group2.Length; i++)
+                    {
+                        int j = i;
+                        Skiers remember = Group2[i];
+                        while (j > 0 && Group2[j].Result < Group2[j - 1].Result)
+                        {
+                            (Group2[j], Group2[j - 1]) = (Group2[j - 1], Group2[j]);
+                            j--;
+                        }
+                        Group2[j] = remember;
+                    }
+                }
+                #endregion
+                Console.WriteLine("N    Famile\tResut");
+
+                for (int i = 0; i != Group1.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}{Group1[i].Famile,8}\t{Group1[i].Result,-10}");
+                }
+                Console.WriteLine();
+                Console.WriteLine("N    Famile\tResut");
+                for (int i = 0; i != Group2.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}{Group2[i].Famile,10}\t{Group2[i].Result,-10}");
+                }
+
+
+                Skiers[] Group3 = new Skiers[Group1.Length + Group2.Length];
+                int j1 = 0;
+                int j2 = 0;
+                int k = 0; ;
+                Console.WriteLine();
+                Console.WriteLine("N    Famile\tResut");
+
+                while ((j1 != Group1.Length) & (j2 != Group2.Length))
+                {
+                    if (Group1[j1].Result < Group2[j2].Result)
+                    {
+                        Group3[k] = Group1[j1];
+                        ++j1;
+                        Console.WriteLine($"{k + 1}{Group3[k].Famile,10}\t{Group3[k].Result,-10}");
+                    }
+                    else
+                    {
+                        Group3[k] = Group2[j2];
+                        Console.WriteLine($"{k + 1}{Group3[k].Famile,10}\t{Group3[k].Result,-10}");
+                        ++j2;
+                    }
+                    k++;
+                }
+                if (j1 == Group1.Length)
+                {
+                    for (int i = k; i != Group3.Length; i++)
+                    {
+                        Group3[i] = Group2[j2];
+                        Console.WriteLine($"{i + 1}{Group3[i].Famile,10}\t{Group3[i].Result,-10}");
+                        ++j2;
+                    }
+                }
+                else
+                {
+                    for (int i = k; i != Group3.Length; i++)
+                    {
+                        Group3[i] = Group1[j1];
+                        Console.WriteLine($"{i + 1}{Group3[i].Famile,10}\t{Group3[i].Result,-10}");
+                        ++j1;
+                    }
+                }
+            }
+
+            static void Task3_6()
+            {
+                Japanese[] Jap = new Japanese[7];
+                Jap[0] = new Japanese("Roman", "Dog", "", "Sakura");
+                Jap[1] = new Japanese("Nikita", "Cat", "Trust", "Elka");
+                Jap[2] = new Japanese("Alex", "Dog", "Shy", "Dyb");
+                Jap[3] = new Japanese("Mark", "", "Calm", "Bereza");
+                Jap[4] = new Japanese("Kostya", "Dog", "Shy", "Listven");
+                Jap[5] = new Japanese("Igor", "Dog", "Shy", "Vinog");
+                Jap[6] = new Japanese("Slava", "", "", "");
+
+                for (int i = 0; i != Jap.Length; i++)
+                    Jap[i].Print();
+
+                List<string> Animal = new List<string>();
+                List<string> Character = new List<string>();
+                List<string> Tree = new List<string>();
+
+                List<int> AnimalCounter = new List<int>();
+                List<int> CharacterCounter = new List<int>();
+                List<int> TreeCounter = new List<int>();
+
+                int count = 0;
+                int AnimCount = 0;
+                int CharCount = 0;
+                int TreeCount = 0;
+
+                while (Animal.Count == 0 | Character.Count == 0 | Tree.Count == 0)
+                {
+                    if (Animal.Count == 0)
+                    {
+                        if (Jap[count].Ans1 != "")
+                        {
+                            Animal.Add(Jap[count].Ans1);
+                            AnimalCounter.Add(1);
+                        }
+                        else
+                            AnimCount++;
+                    }
+                    if (Character.Count == 0)
+                    {
+                        if (Jap[count].Ans2 != "")
+                        {
+                            Character.Add(Jap[count].Ans2);
+                            CharacterCounter.Add(1);
+                        }
+                        else
+                            CharCount++;
+                    }
+                    if (Tree.Count == 0)
+                    {
+                        if (Jap[count].Ans3 != "")
+                        {
+                            Tree.Add(Jap[count].Ans3);
+                            TreeCounter.Add(1);
+                        }
+                        else
+                            TreeCount++;
+                    }
+                    count++;
+                    if (count == Jap.Length)
+                        break;
+                }
+                //Console.WriteLine($"{Tree[0]}  {Character[0]}    {Animal[0]}");
+                //Написал первый элемент НЕПУСТОЙ
+
+                for (int i = AnimCount + 1; i != Jap.Length; i++)
+                {
+                    int flag = 0;
+                    if (Jap[i].Ans1 != "")
+                    {
+                        for (int j = 0; j != Animal.Count; j++)
+                        {
+                            if (Jap[i].Ans1 == Animal[j])
+                            {
+                                AnimalCounter[j] += 1;
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if (flag == 0)
+                        {
+                            Animal.Add(Jap[i].Ans1);
+                            AnimalCounter.Add(1);
+                        }
+                    }
+                }
+                for (int i = CharCount + 1; i != Jap.Length; i++)
+                {
+                    int flag = 0;
+                    if (Jap[i].Ans2 != "")
+                    {
+                        for (int j = 0; j != Character.Count; j++)
+                        {
+                            if (Jap[i].Ans2 == Character[j])
+                            {
+                                CharacterCounter[j] += 1;
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if (flag == 0)
+                        {
+                            Character.Add(Jap[i].Ans2);
+                            CharacterCounter.Add(1);
+
+                        }
+
+                    }
+                }
+                for (int i = TreeCount + 1; i != Jap.Length; i++)
+                {
+                    int flag = 0;
+                    if (Jap[i].Ans3 != "")
+                    {
+                        for (int j = 0; j != Tree.Count; j++)
+                        {
+                            if (Jap[i].Ans3 == Tree[j])
+                            {
+                                TreeCounter[j] += 1;
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if (flag == 0)
+                        {
+                            Tree.Add(Jap[i].Ans3);
+                            TreeCounter.Add(1);
+
+                        }
+
+                    }
+                }
+                //Нашел все повторения и подсчитал их в два списка!
+
+                Console.WriteLine();
+                if (Animal.Count != 0)
+                {
+                    int sm = 0;
+                    foreach (int x in AnimalCounter)
+                        sm += x;
+                    AnimalQuantity[] AnQ = new AnimalQuantity[Animal.Count];
+                    for (int i = 0; i != Animal.Count; i++)
+                    {
+                        AnQ[i] = new AnimalQuantity(Animal[i], AnimalCounter[i] * 100 / sm);
+                    }
+                    //sort
+                    for (int i = 1; i < AnQ.Length; i++)
+                    {
+                        var remembered = AnQ[i];
+                        var j = i;
+                        while (j > 0 && AnQ[j - 1].res < AnQ[j].res)
+                        {
+                            var temp = AnQ[j - 1];
+                            AnQ[j - 1] = AnQ[j];
+                            AnQ[j] = temp;
+                            j--;
+                        }
+                        AnQ[j] = remembered;
+                    }
+                    for (int i = 0; i != Math.Min(AnQ.Length, 5); i++)
+                    {
+                        AnQ[i].Print();
+                    }
+                }
+                Console.WriteLine();
+                if (Character.Count != 0)
+                {
+                    int sm = 0;
+                    foreach (int x in CharacterCounter)
+                        sm += x;
+                    CharacterQuantity[] ChQ = new CharacterQuantity[Character.Count];
+                    for (int i = 0; i != Character.Count; i++)
+                    {
+                        ChQ[i] = new CharacterQuantity(Character[i], CharacterCounter[i] * 100 / sm);
+                    }
+                    for (int i = 1; i < ChQ.Length; i++)
+                    {
+                        var remembered = ChQ[i];
+                        var j = i;
+                        while (j > 0 && ChQ[j - 1].res < ChQ[j].res)
+                        {
+                            var temp = ChQ[j - 1];
+                            ChQ[j - 1] = ChQ[j];
+                            ChQ[j] = temp;
+                            j--;
+                        }
+                        ChQ[j] = remembered;
+                    }
+                    for (int i = 0; i != Math.Min(ChQ.Length, 5); i++)
+                    {
+                        ChQ[i].Print();
+                    }
+                }
+                Console.WriteLine();
+                if (Tree.Count != 0)
+                {
+                    int sm = 0;
+                    foreach (int x in TreeCounter)
+                        sm += x;
+                    TreeQuantity[] TrQ = new TreeQuantity[Tree.Count];
+                    for (int i = 0; i != Tree.Count; i++)
+                    {
+                        TrQ[i] = new TreeQuantity(Tree[i], TreeCounter[i] * 100 / sm);
+                    }
+                    for (int i = 1; i < TrQ.Length; i++)
+                    {
+                        var remembered = TrQ[i];
+                        var j = i;
+                        while (j > 0 && TrQ[j - 1].res < TrQ[j].res)
+                        {
+                            var temp = TrQ[j - 1];
+                            TrQ[j - 1] = TrQ[j];
+                            TrQ[j] = temp;
+                            j--;
+                        }
+                        TrQ[j] = remembered;
+                    }
+                    for (int i = 0; i != Math.Min(TrQ.Length, 5); i++)
+                    {
+                        TrQ[i].Print();
+                    }
+                }
+                //Заношу в отдельную конструкцию элементы, чтобы проще было сортировать и вывожу первые пять элементов! 
+            }
+
+            Task3_1();
+        }
+    }
+
+}
