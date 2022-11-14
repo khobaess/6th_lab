@@ -328,15 +328,28 @@ namespace _6_Lab {
                 static Task_3_4[] mixGroups(Task_3_4[] groupA, Task_3_4[] groupB) {
                     Task_3_4[] groupC = new Task_3_4[groupA.Length + groupB.Length];
 
-                    for (int i = 0; i < groupA.Length; i++) {
-                        groupC[i] = groupA[i];
+                    int indA = 0, indB = 0;
+                    for (int i = 0; i < groupC.Length; i++) {
+                        if (indA == groupA.Length) {
+                            groupC[i] = groupB[indB];
+                            indB++;
+                            continue;
+                        }
+                        if (indB == groupB.Length) {
+                            groupC[i] = groupA[indA];
+                            indA++;
+                            continue;
+                        }
+                        if (groupA[indA].Result < groupB[indB].Result) {
+                            groupC[i] = groupA[indA];
+                            indA++;
+                        } else {
+                            groupC[i] = groupB[indB];
+                            indB++;
+                        }
                     }
 
-                    for (int i = groupA.Length; i < groupA.Length + groupB.Length; i++) {
-                        groupC[i] = groupB[i - groupA.Length];
-                    }
-
-                    return sortGroup(groupC);
+                    return groupC;
                 }
 
 
