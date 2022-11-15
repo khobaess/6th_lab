@@ -44,9 +44,9 @@ namespace lab6
     struct StudentGroup
     {
         public double res;
-        public int[] Marks;
-        public string NameGroup;
-        public int CountPeople;
+        private int[] Marks;
+        private string NameGroup;
+        private int CountPeople;
         public StudentGroup(string NameGroup, int CountPeople, int[] Marks)
         {
             this.CountPeople = CountPeople;
@@ -109,49 +109,6 @@ namespace lab6
                 Console.WriteLine($"{Famile}\t| Answer\t| {Ans1}");
             if (Ans1 == "" & Ans2 == "" & Ans3 == "")
                 Console.WriteLine($"{Famile}\t| Answer\t| No any answer");
-        }
-    }
-
-    struct AnimalQuantity
-    {
-        public string name;
-        public double res;
-        public AnimalQuantity(string name, double res)
-        {
-            this.name = name;
-            this.res = res;
-        }
-        public void Print()
-        {
-            Console.WriteLine($"{name}\t\t|\t{res}%");
-        }
-    }
-    struct CharacterQuantity
-    {
-        public string name;
-        public double res;
-        public CharacterQuantity(string name, double res)
-        {
-            this.name = name;
-            this.res = res;
-        }
-        public void Print()
-        {
-            Console.WriteLine($"{name}\t\t|\t{res}%");
-        }
-    }
-    struct TreeQuantity
-    {
-        public string name;
-        public double res;
-        public TreeQuantity(string name, double res)
-        {
-            this.name = name;
-            this.res = res;
-        }
-        public void Print()
-        {
-            Console.WriteLine($"{name}\t\t|\t{res}%");
         }
     }
 
@@ -369,6 +326,10 @@ namespace lab6
                 }
             }
 
+
+
+            Task3_6();
+
             static void Task3_6()
             {
                 Japanese[] Jap = new Japanese[7];
@@ -382,48 +343,42 @@ namespace lab6
 
                 for (int i = 0; i != Jap.Length; i++)
                     Jap[i].Print();
-
-                List<string> Animal = new List<string>();
-                List<string> Character = new List<string>();
-                List<string> Tree = new List<string>();
-
-                List<int> AnimalCounter = new List<int>();
-                List<int> CharacterCounter = new List<int>();
-                List<int> TreeCounter = new List<int>();
+                Console.WriteLine();
+            
 
                 int count = 0;
                 int AnimCount = 0;
                 int CharCount = 0;
                 int TreeCount = 0;
+                Dictionary<string, int> AnimalDic = new Dictionary<string, int>();
+                Dictionary<string, int> TreeDic = new Dictionary<string, int>();
+                Dictionary<string, int> CharacterDic = new Dictionary<string, int>();
 
-                while (Animal.Count == 0 | Character.Count == 0 | Tree.Count == 0)
+                while (AnimalDic.Count == 0 | CharacterDic.Count == 0 | TreeDic.Count == 0)
                 {
-                    if (Animal.Count == 0)
+                    if (AnimalDic.Count == 0)
                     {
                         if (Jap[count].Ans1 != "")
                         {
-                            Animal.Add(Jap[count].Ans1);
-                            AnimalCounter.Add(1);
+                            AnimalDic.Add(Jap[count].Ans1,1);                           
                         }
                         else
                             AnimCount++;
                     }
-                    if (Character.Count == 0)
+                    if (CharacterDic.Count == 0)
                     {
                         if (Jap[count].Ans2 != "")
                         {
-                            Character.Add(Jap[count].Ans2);
-                            CharacterCounter.Add(1);
+                            CharacterDic.Add(Jap[count].Ans2, 1);
                         }
                         else
                             CharCount++;
                     }
-                    if (Tree.Count == 0)
+                    if (TreeDic.Count == 0)
                     {
                         if (Jap[count].Ans3 != "")
                         {
-                            Tree.Add(Jap[count].Ans3);
-                            TreeCounter.Add(1);
+                            TreeDic.Add(Jap[count].Ans3, 1);
                         }
                         else
                             TreeCount++;
@@ -432,170 +387,96 @@ namespace lab6
                     if (count == Jap.Length)
                         break;
                 }
-                //Console.WriteLine($"{Tree[0]}  {Character[0]}    {Animal[0]}");
-                //Написал первый элемент НЕПУСТОЙ
+                double AllAnimalCount = 1;
+                double AllCharacterCount = 1;
+                double AllTreeCount = 1;
 
                 for (int i = AnimCount + 1; i != Jap.Length; i++)
                 {
-                    int flag = 0;
                     if (Jap[i].Ans1 != "")
                     {
-                        for (int j = 0; j != Animal.Count; j++)
+                        if (AnimalDic.ContainsKey(Jap[i].Ans1))
                         {
-                            if (Jap[i].Ans1 == Animal[j])
-                            {
-                                AnimalCounter[j] += 1;
-                                flag = 1;
-                                break;
-                            }
+                            AnimalDic[Jap[i].Ans1] += 1;
                         }
-                        if (flag == 0)
+                        else
                         {
-                            Animal.Add(Jap[i].Ans1);
-                            AnimalCounter.Add(1);
+                            AnimalDic.Add(Jap[i].Ans1, 1);
                         }
+                        AllAnimalCount++;
                     }
                 }
                 for (int i = CharCount + 1; i != Jap.Length; i++)
                 {
-                    int flag = 0;
                     if (Jap[i].Ans2 != "")
                     {
-                        for (int j = 0; j != Character.Count; j++)
+                        if (CharacterDic.ContainsKey(Jap[i].Ans2))
                         {
-                            if (Jap[i].Ans2 == Character[j])
-                            {
-                                CharacterCounter[j] += 1;
-                                flag = 1;
-                                break;
-                            }
+                            CharacterDic[Jap[i].Ans2] += 1;
                         }
-                        if (flag == 0)
+                        else
                         {
-                            Character.Add(Jap[i].Ans2);
-                            CharacterCounter.Add(1);
-
+                            CharacterDic.Add(Jap[i].Ans2, 1);
                         }
-
+                        AllCharacterCount++;
                     }
                 }
                 for (int i = TreeCount + 1; i != Jap.Length; i++)
                 {
-                    int flag = 0;
                     if (Jap[i].Ans3 != "")
                     {
-                        for (int j = 0; j != Tree.Count; j++)
+                        if (TreeDic.ContainsKey(Jap[i].Ans3))
                         {
-                            if (Jap[i].Ans3 == Tree[j])
-                            {
-                                TreeCounter[j] += 1;
-                                flag = 1;
-                                break;
-                            }
+                            TreeDic[Jap[i].Ans3] += 1;
                         }
-                        if (flag == 0)
+                        else
                         {
-                            Tree.Add(Jap[i].Ans3);
-                            TreeCounter.Add(1);
-
+                           TreeDic.Add(Jap[i].Ans3, 1);
                         }
-
+                        AllTreeCount++;
                     }
+                   
                 }
-                //Нашел все повторения и подсчитал их в два списка!
+               
 
-                Console.WriteLine();
-                if (Animal.Count != 0)
+                AnimalDic = AnimalDic.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+                CharacterDic =  CharacterDic.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+                TreeDic = TreeDic.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                int p;
+                if (AnimalDic.Count > 0)
                 {
-                    int sm = 0;
-                    foreach (int x in AnimalCounter)
-                        sm += x;
-                    AnimalQuantity[] AnQ = new AnimalQuantity[Animal.Count];
-                    for (int i = 0; i != Animal.Count; i++)
+                    p = 0;
+                    foreach (var check in AnimalDic)
                     {
-                        AnQ[i] = new AnimalQuantity(Animal[i], AnimalCounter[i] * 100 / sm);
-                    }
-                    //sort
-                    for (int i = 1; i < AnQ.Length; i++)
-                    {
-                        var remembered = AnQ[i];
-                        var j = i;
-                        while (j > 0 && AnQ[j - 1].res < AnQ[j].res)
-                        {
-                            var temp = AnQ[j - 1];
-                            AnQ[j - 1] = AnQ[j];
-                            AnQ[j] = temp;
-                            j--;
-                        }
-                        AnQ[j] = remembered;
-                    }
-                    for (int i = 0; i != Math.Min(AnQ.Length, 5); i++)
-                    {
-                        AnQ[i].Print();
+                        p++;
+                        Console.WriteLine($"{check.Key}\t | \t{check.Value*100/AllAnimalCount:f2}%");
+                        if (p == 5) break;
                     }
                 }
                 Console.WriteLine();
-                if (Character.Count != 0)
+                if (CharacterDic.Count > 0)
                 {
-                    int sm = 0;
-                    foreach (int x in CharacterCounter)
-                        sm += x;
-                    CharacterQuantity[] ChQ = new CharacterQuantity[Character.Count];
-                    for (int i = 0; i != Character.Count; i++)
+                    p = 0;
+                    foreach (var check in CharacterDic)
                     {
-                        ChQ[i] = new CharacterQuantity(Character[i], CharacterCounter[i] * 100 / sm);
-                    }
-                    for (int i = 1; i < ChQ.Length; i++)
-                    {
-                        var remembered = ChQ[i];
-                        var j = i;
-                        while (j > 0 && ChQ[j - 1].res < ChQ[j].res)
-                        {
-                            var temp = ChQ[j - 1];
-                            ChQ[j - 1] = ChQ[j];
-                            ChQ[j] = temp;
-                            j--;
-                        }
-                        ChQ[j] = remembered;
-                    }
-                    for (int i = 0; i != Math.Min(ChQ.Length, 5); i++)
-                    {
-                        ChQ[i].Print();
+                        p++;
+                        Console.WriteLine($"{check.Key}\t | \t{check.Value * 100 / AllCharacterCount:f2}%");
+                        if (p == 5) break;
                     }
                 }
                 Console.WriteLine();
-                if (Tree.Count != 0)
+                if (TreeDic.Count > 0)
                 {
-                    int sm = 0;
-                    foreach (int x in TreeCounter)
-                        sm += x;
-                    TreeQuantity[] TrQ = new TreeQuantity[Tree.Count];
-                    for (int i = 0; i != Tree.Count; i++)
+                    p = 0;
+                    foreach (var check in TreeDic)
                     {
-                        TrQ[i] = new TreeQuantity(Tree[i], TreeCounter[i] * 100 / sm);
-                    }
-                    for (int i = 1; i < TrQ.Length; i++)
-                    {
-                        var remembered = TrQ[i];
-                        var j = i;
-                        while (j > 0 && TrQ[j - 1].res < TrQ[j].res)
-                        {
-                            var temp = TrQ[j - 1];
-                            TrQ[j - 1] = TrQ[j];
-                            TrQ[j] = temp;
-                            j--;
-                        }
-                        TrQ[j] = remembered;
-                    }
-                    for (int i = 0; i != Math.Min(TrQ.Length, 5); i++)
-                    {
-                        TrQ[i].Print();
+                        p++;
+                        Console.WriteLine($"{check.Key}\t | \t{check.Value * 100 / AllTreeCount:f2}%");
+                        if (p == 5) break;
                     }
                 }
-                //Заношу в отдельную конструкцию элементы, чтобы проще было сортировать и вывожу первые пять элементов! 
             }
-
-            Task3_1();
         }
     }
 
