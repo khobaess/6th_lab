@@ -1,0 +1,57 @@
+Student[] St = new Student[4];
+St[0] = new Student("Gorohov", new double[] { 3, 3, 3, 5 });
+St[1] = new Student("Ivanov", new double[] { 5, 4, 5, 5 });
+St[2] = new Student("Golokov", new double[] { 4, 4, 4, 5 });
+St[3] = new Student("Averisyan", new double[] { 5, 5, 5, 5 });
+
+for (int i = 0; i < St.Length-1; i++)
+{
+    double amax = St[i].s;
+    int imax = i;
+    for (int j =i+1; j < St.Length; j++)
+    {
+        if (St[j].s>amax)
+        {
+            amax = St[j].s;
+            imax = j;
+        }
+    }
+    Student tmp;
+    tmp = St[imax];
+    St[imax] = St[i];
+    St[i] = tmp;
+}
+
+int b = 0;
+int count = 0;
+for (int i = 0; i < St.Length; i++)
+{
+    for (int j=0; j<St.Length; j++)
+    {
+
+    }
+}
+Console.WriteLine("рейтинг:");
+
+
+struct Student
+{
+    public string Name;
+    public double[] Score;
+    public double s;
+    public Student(string name, double[] score)
+    {
+        Name = name;
+        Score = score;
+        s = 0;
+        for (int i=0; i<Score.Length; i++)
+        {
+            s += Score[i];
+        }
+        s /= 4;
+    }
+    public void ShowStudents()
+    {
+        Console.WriteLine($"фамилия: {Name}   оценки: {string.Join(" ", Score)}");
+    }
+}
