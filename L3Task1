@@ -1,0 +1,62 @@
+Student[] St = new Student[7];
+St[0] = new Student("Gorohov",  new double[] { 3, 4, 4, 5, 5 });
+St[1] = new Student("Ivanov",  new double[] { 5, 4, 5, 4 , 4 });
+St[2] = new Student("Golokov",  new double[] { 2, 5, 5, 4, 3});
+St[3] = new Student("Averisyan",  new double[] { 5, 5, 5, 2, 2 });
+St[4] = new Student("Buganov",  new double[] { 2, 4, 5, 5, 5 });
+St[5] = new Student("Vovanov",  new double[] { 5, 4, 4, 2, 3 });
+St[6] = new Student("Abubakabrov",  new double[] { 3, 2, 2, 2, 4 });
+
+Student[] St1 = new Student[2];
+Student[] St2 = new Student[2];
+Student[] St3 = new Student[2];
+
+///ученики
+for (int i = 0; i < St.Length - 1; i++)
+{
+    double amax = St[i].s;
+    int imax = i;
+    for (int j = i + 1; j < St.Length; j++)
+    {
+        if (St[j].s > amax)
+        {
+            amax = St[j].s;
+            imax = j;
+        }
+    }
+    Student tmp;
+    tmp = St[imax];
+    St[imax] = St[i];
+    St[i] = tmp;
+}
+
+Console.WriteLine("результат соревнования по ученикам:");
+for (int i = 0; i < St.Length; i++)
+{
+    St[i].ShowStudents();
+}
+
+/// группы
+
+struct Student
+{
+    public string Name;
+    public double[] Score;
+    public double s = 0;
+    public Student(string name, double[] score)
+    {
+        Name = name;
+        Score = score;
+        for (int i=0; i<Score.Length; i++)
+        {
+            s += Score[i];
+        }
+        s /= Score.Length;
+    }
+
+    public void ShowStudents()
+    {
+        Console.WriteLine($" фамилия: {Name}    " +
+            $"оценки: {string.Join(" ", Score)}  средний балл: {s}");
+    }
+}
