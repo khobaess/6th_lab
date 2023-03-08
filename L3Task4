@@ -1,0 +1,75 @@
+Sportsmen[] St = new Sportsmen[7];
+
+St[0] = new Sportsmen("Golokov", "BIVT-22-3", 23);
+St[1] = new Sportsmen("Ivanov", "BIVT-22-4", 53);
+St[2] = new Sportsmen("Averisyan", "BIVT-22-3", 28);
+St[3] = new Sportsmen("Vasiliev", "BIVT-22-3", 21);
+St[4] = new Sportsmen("Popov", "BIVT-22-4", 26);
+St[5] = new Sportsmen("Tuchkin", "BIVT-22-4", 51);
+St[6] = new Sportsmen("Nikolaev", "BIVT-22-3", 11);
+
+
+for (int i = 0; i < St.Length - 1; i++)
+{
+    double amax = St[i].S;
+    int imax = i;
+    for (int j = i + 1; j < St.Length; j++)
+    {
+        if (St[j].S > amax)
+        {
+            amax = St[j].S;
+            imax = j;
+        }
+    }
+    Sportsmen temp = St[imax];
+    St[imax] = St[i];
+    St[i] = temp;
+}
+
+
+string[] group = { "BIVT-22-3", "BIVT-22-4" };
+
+for (int i = 0; i < group.Length; i++)
+{
+    int num = 1;
+    for (int j = 0; j < St.Length; j++)
+    {
+        if (St[j].Group == group[i])
+        {
+            Console.WriteLine($"{num} {St[j].ShowStudents()}");
+            num++;
+        }
+    }
+    Console.WriteLine();
+}
+
+
+int count = 1;
+for (int i = 0; i < St.Length; i++)
+{
+    Console.WriteLine($"{count} {St[i].ShowStudents()}");
+    count++;
+}
+Console.WriteLine();
+
+
+
+
+
+struct Sportsmen
+{
+    public string Name;
+    public string Group;
+    public int S;
+    public Sportsmen(string surname, string group, int s)
+    {
+        Name = surname;
+        Group = group;
+        S = s;
+    }
+    public string ShowStudents()
+    {
+        return ($" фамилия: {Name}   группа: {Group}  " +
+            $"результат: {S}");
+    }
+}
