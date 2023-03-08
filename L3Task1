@@ -1,15 +1,11 @@
 Student[] St = new Student[7];
-St[0] = new Student("Gorohov",  new double[] { 3, 4, 4, 5, 5 });
-St[1] = new Student("Ivanov",  new double[] { 5, 4, 5, 4 , 4 });
-St[2] = new Student("Golokov",  new double[] { 2, 5, 5, 4, 3});
-St[3] = new Student("Averisyan",  new double[] { 5, 5, 5, 2, 2 });
-St[4] = new Student("Buganov",  new double[] { 2, 4, 5, 5, 5 });
-St[5] = new Student("Vovanov",  new double[] { 5, 4, 4, 2, 3 });
-St[6] = new Student("Abubakabrov",  new double[] { 3, 2, 2, 2, 4 });
-
-Student[] St1 = new Student[2];
-Student[] St2 = new Student[2];
-Student[] St3 = new Student[2];
+St[0] = new Student("Gorohov","BIVT-22-3",  new double[] { 3, 4, 4, 5, 5 });
+St[1] = new Student("Ivanov", "BIVT-22-4", new double[] { 5, 4, 5, 4 , 4 });
+St[2] = new Student("Golokov", "BIVT-22-3", new double[] { 2, 5, 5, 4, 3});
+St[3] = new Student("Averisyan", "BIVT-22-4", new double[] { 5, 5, 5, 2, 2 });
+St[4] = new Student("Buganov", "BIVT-22-3", new double[] { 2, 4, 5, 5, 5 });
+St[5] = new Student("Vovanov", "BIVT-22-7", new double[] { 5, 4, 4, 2, 3 });
+St[6] = new Student("Abubakabrov", "BIVT-22-7", new double[] { 3, 2, 2, 2, 4 });
 
 ///ученики
 for (int i = 0; i < St.Length - 1; i++)
@@ -30,33 +26,105 @@ for (int i = 0; i < St.Length - 1; i++)
     St[i] = tmp;
 }
 
-Console.WriteLine("результат соревнования по ученикам:");
+Console.WriteLine("результат сессии по ученикам:");
 for (int i = 0; i < St.Length; i++)
 {
-    St[i].ShowStudents();
+    if (St[i].s != 0)
+        St[i].ShowStudents();
 }
 
+
 /// группы
+string [] NameOfGroups = { "BIVT-22-3", "BIVT-22-4", "BIVT-22-7" };
+double s = 0, v = 0, f = 0;
+Groups[] St1 = new Groups[3];
+for (int j = 0; j < NameOfGroups.Length; j++)//группы
+{
+    for (int i = 0; i < St.Length; i++)//ученики
+    {
+
+        if (St[i].Group == NameOfGroups[0])
+        {
+            s += St[i].s;
+        }
+        if (St[i].Group == NameOfGroups[1])
+        {
+            v += St[i].s;
+        }
+        if (St[i].Group == NameOfGroups[2])
+        {
+            f += St[i].s;
+        }
+        
+    }
+}
+
+St1[0] = new Groups("BIVT-22-3", s);
+St1[1] = new Groups("BIVT-22-4", v);
+St1[2] = new Groups("BIVT-22-7", f);
+
+for (int i = 0; i < St1.Length - 1; i++)
+{
+    double amax = St1[i].Z;
+    int imax = i;
+    for (int j = i + 1; j < St1.Length; j++)
+    {
+        if (St1[j].Z > amax)
+        {
+            amax = St1[j].Z;
+            imax = j;
+        }
+    }
+    Groups tmp;
+    tmp = St1[imax];
+    St1[imax] = St1[i];
+    St1[i] = tmp;
+}
+
+Console.WriteLine("результат сессии по группам:");
+for (int i = 0; i < St1.Length; i++)
+{
+        St1[i].ShowStudents1();
+}
+
+
 
 struct Student
 {
     public string Name;
+    public string Group;
     public double[] Score;
     public double s = 0;
-    public Student(string name, double[] score)
+    public Student(string name, string group, double[] score)
     {
         Name = name;
         Score = score;
+        Group = group;
         for (int i=0; i<Score.Length; i++)
         {
+            if (Score[i] < 3)
+                return;
             s += Score[i];
         }
         s /= Score.Length;
     }
-
     public void ShowStudents()
     {
-        Console.WriteLine($" фамилия: {Name}    " +
+        Console.WriteLine($" фамилия: {Name}   группа: {Group}  " +
             $"оценки: {string.Join(" ", Score)}  средний балл: {s}");
+    }
+}
+struct Groups
+{
+    public string Group;
+    public double Z=0;
+    public Groups(string group, double z)
+    {
+        Group = group;
+        Z = z/2;
+    }
+    public void ShowStudents1()
+    {
+        Console.WriteLine($" группа: {Group}   средний балл: {Math.Round(Z)}");
     }
 }
